@@ -41,7 +41,7 @@ export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary/20 text-primary border border-primary/50 hover:bg-primary/30 transition-colors font-mono uppercase tracking-wider text-xs" data-testid="button-new-target">
+        <Button className="bg-primary/20 text-primary border border-primary/50 font-mono uppercase tracking-wider text-xs" data-testid="button-new-target">
           <Plus className="w-4 h-4 mr-2" /> New Foe
         </Button>
       </DialogTrigger>
@@ -68,7 +68,7 @@ export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id
             <Label htmlFor="init" className="text-xs text-muted-foreground uppercase font-mono">Initiative (Optional)</Label>
             <Input id="init" type="number" value={init} onChange={e => setInit(e.target.value)} className="bg-card/60 border-primary/30 font-mono text-center" placeholder="18" data-testid="input-enemy-init" />
           </div>
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-mono uppercase tracking-widest mt-4" data-testid="button-submit-target">Enlist</Button>
+          <Button type="submit" className="w-full bg-primary text-primary-foreground font-mono uppercase tracking-widest mt-4" data-testid="button-submit-target">Enlist</Button>
         </form>
       </DialogContent>
     </Dialog>

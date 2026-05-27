@@ -75,10 +75,10 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
           <Cpu className="w-3 h-3 animate-pulse" /> Quill ready
         </div>
         
-        <Button variant="ghost" size="sm" onClick={handleSaveSnapshot} className="h-8 font-mono text-xs hover:bg-primary/10 hover:text-primary text-muted-foreground" data-testid="button-save-encounter">
+        <Button variant="ghost" size="sm" onClick={handleSaveSnapshot} className="h-8 font-mono text-xs text-muted-foreground" data-testid="button-save-encounter">
           <Save className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Record</span>
         </Button>
-        <Button variant="ghost" size="sm" onClick={handleReset} className="h-8 font-mono text-xs hover:bg-destructive/10 hover:text-destructive text-muted-foreground" data-testid="button-reset-encounter">
+        <Button variant="ghost" size="sm" onClick={handleReset} className="h-8 font-mono text-xs text-muted-foreground" data-testid="button-reset-encounter">
           <RotateCcw className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Purge</span>
         </Button>
         
@@ -90,7 +90,7 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
           onClick={() => setDiceOpen(!diceOpen)}
           className={cn(
             "h-8 font-mono text-xs tracking-wider transition-all",
-            diceOpen ? "bg-primary text-primary-foreground" : "border-primary/30 text-primary hover:bg-primary/10"
+            diceOpen ? "bg-primary text-primary-foreground" : "border-primary/30 text-primary"
           )}
           data-testid="button-toggle-dice"
         >

@@ -34,7 +34,7 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
         <Button 
           size="sm" 
           onClick={nextTurn}
-          className="h-7 text-xs font-mono uppercase bg-primary hover:bg-primary/80 text-primary-foreground tracking-wider"
+          className="h-7 text-xs font-mono uppercase bg-primary text-primary-foreground tracking-wider"
           data-testid="button-next-turn"
         >
           Advance <ChevronRight className="w-3 h-3 ml-1" />

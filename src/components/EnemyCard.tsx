@@ -146,7 +146,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-card/60" data-testid={`button-options-${enemy.id}`}>
+              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full" data-testid={`button-options-${enemy.id}`}>
                 <Edit2 className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
@@ -157,7 +157,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
               <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer font-mono text-xs">
                 <Copy className="mr-2 h-3 w-3" /> Clone Unit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onRemove} className="cursor-pointer font-mono text-xs text-destructive hover:text-destructive">
+              <DropdownMenuItem onClick={onRemove} className="cursor-pointer font-mono text-xs text-destructive">
                 <Trash2 className="mr-2 h-3 w-3" /> Terminate
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -210,13 +210,13 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                 <div className="space-y-3 p-3 bg-card/20 rounded-lg border border-border/30">
                   <div className="flex flex-wrap gap-1">
                     {[-10, -5, -1].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-destructive/20 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/50 transition-colors" data-testid={`btn-dmg-${val}-${enemy.id}`}>
+                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-destructive/20 text-destructive" data-testid={`btn-dmg-${val}-${enemy.id}`}>
                         {val}
                       </Button>
                     ))}
                     <div className="w-full h-px bg-border my-1" />
                     {[+1, +5, +10].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-healing/20 hover:bg-healing/20 hover:text-healing hover:border-healing/50 transition-colors" data-testid={`btn-heal-${val}-${enemy.id}`}>
+                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-healing/20 text-healing" data-testid={`btn-heal-${val}-${enemy.id}`}>
                         +{val}
                       </Button>
                     ))}
@@ -230,10 +230,10 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                       className="h-8 font-mono text-center bg-card/60 border-primary/20 w-16"
                       data-testid={`input-manual-dmg-${enemy.id}`}
                     />
-                    <Button onClick={() => applyDamageInput(false)} className="flex-1 h-8 bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive hover:text-foreground text-xs uppercase tracking-widest" data-testid={`btn-apply-dmg-${enemy.id}`}>
+                    <Button onClick={() => applyDamageInput(false)} className="flex-1 h-8 bg-destructive/10 text-destructive border border-destructive/30 text-xs uppercase tracking-widest" data-testid={`btn-apply-dmg-${enemy.id}`}>
                       Damage
                     </Button>
-                    <Button onClick={() => applyDamageInput(true)} className="flex-1 h-8 bg-healing/10 text-healing border border-healing/30 hover:bg-healing hover:text-foreground text-xs uppercase tracking-widest" data-testid={`btn-apply-heal-${enemy.id}`}>
+                    <Button onClick={() => applyDamageInput(true)} className="flex-1 h-8 bg-healing/10 text-healing border border-healing/30 text-xs uppercase tracking-widest" data-testid={`btn-apply-heal-${enemy.id}`}>
                       Heal
                     </Button>
                   </div>
@@ -253,7 +253,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                   </div>
                   <div className="col-span-2 flex justify-end gap-2 mt-2">
                     <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)} className="h-7 text-xs">Cancel</Button>
-                    <Button size="sm" onClick={saveEdits} className="h-7 text-xs bg-primary/20 text-primary border border-primary/50 hover:bg-primary/40">Save</Button>
+                    <Button size="sm" onClick={saveEdits} className="h-7 text-xs bg-primary/20 text-primary border border-primary/50">Save</Button>
                   </div>
                 </div>
               )}

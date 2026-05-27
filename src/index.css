@@ -89,7 +89,7 @@
 
   --radius: 0.5rem;
 
-  --app-font-sans: Georgia, Cambria, "Times New Roman", serif;
+  --app-font-sans: ui-serif, Georgia, Cambria, "Times New Roman", serif;
   --app-font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
@@ -98,7 +98,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    @apply bg-background text-foreground antialiased overflow-x-hidden;
+    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
     background-image: linear-gradient(rgba(255, 245, 225, 0.06) 1px, transparent 1px),
                       linear-gradient(90deg, rgba(255, 245, 225, 0.06) 1px, transparent 1px),
                       linear-gradient(180deg, rgba(255, 245, 210, 0.08), transparent 65%),

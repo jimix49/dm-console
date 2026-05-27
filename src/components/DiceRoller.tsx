@@ -29,7 +29,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
             <div className="flex items-center gap-2 text-primary font-mono uppercase tracking-widest text-sm">
               <Dices className="w-4 h-4" /> Dice Hall
             </div>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-card/60" data-testid="button-close-dice">
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full" data-testid="button-close-dice">
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -44,7 +44,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                     <Button 
                       key={d} 
                       variant="outline" 
-                      className="font-mono text-xs h-10 border-primary/20 hover:border-primary hover:bg-primary/10 hover:text-primary transition-all shadow-sm"
+                      className="font-mono text-xs h-10 border-primary/20 text-foreground"
                       onClick={() => dice.addDie(d)}
                       data-testid={`btn-die-${d}`}
                     >
@@ -88,13 +88,13 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                 </div>
 
                 <div className="flex gap-2 mt-4">
-                  <Button variant="outline" onClick={dice.clearPending} className="flex-1 font-mono text-xs border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive">
+                  <Button variant="outline" onClick={dice.clearPending} className="flex-1 font-mono text-xs border-destructive/30 text-destructive">
                     Sweep
                   </Button>
                   <Button 
                     onClick={dice.executeRoll} 
                     disabled={dice.pendingDice.length === 0 && dice.modifier === 0 || dice.isRolling}
-                    className="flex-2 bg-primary text-primary-foreground font-mono uppercase tracking-widest hover:bg-primary/80 disabled:opacity-50"
+                    className="flex-2 bg-primary text-primary-foreground font-mono uppercase tracking-widest disabled:opacity-50"
                     data-testid="btn-execute-roll"
                   >
                     {dice.isRolling ? <RotateCcw className="w-4 h-4 animate-spin" /> : 'Cast'}
