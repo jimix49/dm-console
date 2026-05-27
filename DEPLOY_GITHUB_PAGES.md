@@ -16,7 +16,7 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/dm-console.git
+git remote add origin https://github.com/jimix49/dm-console.git
 git push -u origin main
 ```
 
