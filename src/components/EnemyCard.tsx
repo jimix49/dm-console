@@ -208,15 +208,15 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
               {/* HP Controls */}
               {!isEditing && (
                 <div className="space-y-3 p-3 bg-black/20 rounded-lg border border-white/5">
-                  <div className="flex gap-1 justify-between">
+                  <div className="flex flex-wrap gap-1">
                     {[-10, -5, -1].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 h-8 text-xs font-mono border-destructive/20 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/50 transition-colors" data-testid={`btn-dmg-${val}-${enemy.id}`}>
+                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-destructive/20 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/50 transition-colors" data-testid={`btn-dmg-${val}-${enemy.id}`}>
                         {val}
                       </Button>
                     ))}
-                    <div className="w-[1px] bg-border mx-1" />
+                    <div className="w-full h-px bg-border my-1" />
                     {[+1, +5, +10].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 h-8 text-xs font-mono border-healing/20 hover:bg-healing/20 hover:text-healing hover:border-healing/50 transition-colors" data-testid={`btn-heal-${val}-${enemy.id}`}>
+                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-healing/20 hover:bg-healing/20 hover:text-healing hover:border-healing/50 transition-colors" data-testid={`btn-heal-${val}-${enemy.id}`}>
                         +{val}
                       </Button>
                     ))}
