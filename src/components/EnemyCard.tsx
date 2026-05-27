@@ -146,7 +146,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
           )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-white/5" data-testid={`button-options-${enemy.id}`}>
+              <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full hover:bg-card/60" data-testid={`button-options-${enemy.id}`}>
                 <Edit2 className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
@@ -179,7 +179,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
               <div className="flex justify-between items-end">
                 <div className="flex-1 mr-4">
                   <div className="flex justify-between text-xs font-mono mb-1 uppercase tracking-wider text-muted-foreground">
-                    <span>Hull Integrity</span>
+                    <span>Vitality</span>
                     <span className={cn(hpPercent < 30 ? "text-destructive font-bold" : "text-primary")}>
                       {enemy.currentHp} / {enemy.maxHp}
                     </span>

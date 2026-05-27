@@ -23,13 +23,13 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: '100%', opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="fixed inset-y-0 right-0 w-full sm:w-96 z-50 flex flex-col bg-card border-l border-border sci-fi-panel shadow-[-10px_0_30px_rgba(0,0,0,0.5)]"
+          className="fixed inset-y-0 right-0 w-full sm:w-96 z-50 flex flex-col bg-card border-l border-border medieval-panel"
         >
           <div className="p-4 border-b border-border bg-card/60 flex justify-between items-center">
             <div className="flex items-center gap-2 text-primary font-mono uppercase tracking-widest text-sm">
-              <Dices className="w-4 h-4" /> Probability Matrix
+              <Dices className="w-4 h-4" /> Dice Hall
             </div>
-            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-white/5" data-testid="button-close-dice">
+            <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-card/60" data-testid="button-close-dice">
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -66,7 +66,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
               {/* Pending Roll */}
               <div className="bg-card/30 border border-primary/30 rounded-xl p-4 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-                <h3 className="text-[10px] uppercase font-mono text-primary/70 mb-2 tracking-wider">Queued Sequence</h3>
+                <h3 className="text-[10px] uppercase font-mono text-primary/70 mb-2 tracking-wider">Pending Roll</h3>
                 
                 <div className="min-h-[40px] flex items-center justify-center font-mono text-lg tracking-widest">
                   {dice.pendingDice.length > 0 || dice.modifier !== 0 ? (
@@ -83,13 +83,13 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                       )}
                     </span>
                   ) : (
-                    <span className="text-muted-foreground/30">AWAITING INPUT</span>
+                    <span className="text-muted-foreground/30">Awaiting Fate</span>
                   )}
                 </div>
 
                 <div className="flex gap-2 mt-4">
                   <Button variant="outline" onClick={dice.clearPending} className="flex-1 font-mono text-xs border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive">
-                    Clear
+                    Sweep
                   </Button>
                   <Button 
                     onClick={dice.executeRoll} 
@@ -97,14 +97,14 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                     className="flex-2 bg-primary text-primary-foreground font-mono uppercase tracking-widest hover:bg-primary/80 disabled:opacity-50"
                     data-testid="btn-execute-roll"
                   >
-                    {dice.isRolling ? <RotateCcw className="w-4 h-4 animate-spin" /> : 'Execute'}
+                    {dice.isRolling ? <RotateCcw className="w-4 h-4 animate-spin" /> : 'Cast'}
                   </Button>
                 </div>
               </div>
 
               {/* Manual Expression */}
               <div>
-                <h3 className="text-[10px] uppercase font-mono text-muted-foreground mb-3 tracking-wider">Manual Override</h3>
+                <h3 className="text-[10px] uppercase font-mono text-muted-foreground mb-3 tracking-wider">Manual Roll</h3>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
                     <Hash className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground" />
@@ -117,7 +117,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                     />
                   </div>
                   <Button variant="secondary" onClick={dice.rollManual} disabled={!dice.manualExpression || dice.isRolling} className="font-mono text-xs">
-                    Run
+                    Roll
                   </Button>
                 </div>
               </div>
@@ -126,7 +126,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
             <div className="flex-1 bg-card/60 border-t border-border overflow-hidden flex flex-col">
               <div className="p-3 border-b border-border/50 flex justify-between items-center">
                 <span className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
-                  <Clock className="w-3 h-3" /> Telemetry Log
+                  <Clock className="w-3 h-3" /> Roll Ledger
                 </span>
                 {dice.history.length > 0 && (
                   <button onClick={dice.clearHistory} className="text-[10px] uppercase font-mono text-destructive/70 hover:text-destructive transition-colors">Clear</button>
@@ -159,7 +159,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                   </AnimatePresence>
                   {dice.history.length === 0 && (
                     <div className="text-center text-muted-foreground/50 text-xs font-mono py-8">
-                      No telemetry data.
+                      No rolls recorded.
                     </div>
                   )}
                 </div>

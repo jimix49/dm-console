@@ -50,47 +50,47 @@
 
 :root {
   /* Warm parchment and timber theme */
-  --background: 34 25% 10%;
-  --foreground: 35 20% 92%;
-  --border: 34 30% 20% / 0.55;
-  --input: 34 28% 18% / 0.55;
-  --ring: 42 40% 65% / 0.45;
+  --background: 35 20% 14%;
+  --foreground: 35 15% 94%;
+  --border: 30 25% 16% / 0.75;
+  --input: 30 25% 18% / 0.8;
+  --ring: 40 35% 65% / 0.4;
 
-  --card: 30 25% 12%;
-  --card-foreground: 35 18% 92%;
-  --card-border: 34 25% 18% / 0.7;
+  --card: 30 22% 18%;
+  --card-foreground: 35 15% 94%;
+  --card-border: 30 22% 14% / 0.8;
 
-  --popover: 30 24% 14%;
-  --popover-foreground: 35 18% 92%;
-  --popover-border: 34 24% 20% / 0.7;
+  --popover: 30 20% 18%;
+  --popover-foreground: 35 15% 94%;
+  --popover-border: 30 20% 16% / 0.8;
 
-  --primary: 34 72% 56%;
-  --primary-foreground: 35 18% 8%;
-  --primary-border: 34 72% 45%;
+  --primary: 38 75% 55%;
+  --primary-foreground: 20 20% 12%;
+  --primary-border: 38 75% 45%;
 
-  --secondary: 35 35% 38%;
-  --secondary-foreground: 35 18% 92%;
-  --secondary-border: 35 35% 26%;
+  --secondary: 30 35% 30%;
+  --secondary-foreground: 35 15% 94%;
+  --secondary-border: 30 35% 20%;
 
-  --muted: 35 18% 32%;
-  --muted-foreground: 35 18% 70%;
-  --muted-border: 34 18% 26%;
+  --muted: 35 18% 42%;
+  --muted-foreground: 35 18% 72%;
+  --muted-border: 30 15% 25%;
 
-  --accent: 32 30% 45%;
-  --accent-foreground: 35 18% 92%;
-  --accent-border: 35 30% 36%;
+  --accent: 90 30% 48%;
+  --accent-foreground: 35 15% 94%;
+  --accent-border: 90 30% 40%;
 
-  --destructive: 358 70% 48%;
-  --destructive-foreground: 35 18% 92%;
-  --destructive-border: 358 70% 35%;
+  --destructive: 5 72% 45%;
+  --destructive-foreground: 35 18% 94%;
+  --destructive-border: 5 72% 35%;
 
-  --healing: 110 30% 65%;
-  --warning: 42 78% 55%;
+  --healing: 130 35% 48%;
+  --warning: 34 80% 48%;
 
   --radius: 0.5rem;
 
-  --app-font-sans: "Space Grotesk", "Inter", sans-serif;
-  --app-font-mono: "Space Mono", "JetBrains Mono", monospace;
+  --app-font-sans: Georgia, Cambria, "Times New Roman", serif;
+  --app-font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
 @layer base {
@@ -99,28 +99,18 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                      radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 18%),
-                      radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.045), transparent 15%);
-    background-size: 40px 40px, 40px 40px, 280px 280px, 260px 260px;
+    background-image: linear-gradient(rgba(255, 245, 225, 0.06) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 245, 225, 0.06) 1px, transparent 1px),
+                      linear-gradient(180deg, rgba(255, 245, 210, 0.08), transparent 65%),
+                      radial-gradient(circle at top left, rgba(255, 240, 190, 0.14), transparent 18%);
+    background-size: 36px 36px, 36px 36px, 100% 250px, 260px 260px;
     background-attachment: fixed;
     background-color: hsl(var(--background));
   }
 }
 
-.sci-fi-glow {
-  box-shadow: 0 0 16px hsl(var(--primary) / 0.14), inset 0 0 16px hsl(var(--primary) / 0.08);
-}
-
-.sci-fi-glow-hover:hover {
-  box-shadow: 0 0 20px hsl(var(--primary) / 0.2), inset 0 0 20px hsl(var(--primary) / 0.1);
-  border-color: hsl(var(--primary));
-}
-
-.sci-fi-panel {
-  backdrop-filter: blur(2px);
-  background: linear-gradient(145deg, hsl(var(--card) / 0.95), hsl(var(--card) / 1));
+.medieval-panel {
+  background: linear-gradient(180deg, hsl(var(--card) / 0.98), hsl(var(--card) / 0.93));
   border: 1px solid hsl(var(--card-border));
-  box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.04), 0 20px 40px rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.05), 0 20px 35px rgba(0, 0, 0, 0.12);
 }

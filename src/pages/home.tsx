@@ -50,13 +50,13 @@ export default function Home() {
         <div className="flex-1 flex flex-col relative z-10 p-4 lg:p-6 overflow-hidden max-w-7xl mx-auto w-full gap-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 sci-fi-panel p-4 rounded-xl border border-border">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 medieval-panel p-4 rounded-xl">
                 <div className="flex items-center gap-4 flex-1 w-full sm:w-auto">
                   <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input 
-                      placeholder="Search enemies..." 
-                      className="pl-9 bg-card/60 border-primary/20 focus-visible:ring-primary font-mono text-sm"
+                      placeholder="Search foes..." 
+                      className="pl-9 bg-card/60 border-secondary/30 focus-visible:ring-primary font-mono text-sm"
                       value={search}
                       onChange={e => setSearch(e.target.value)}
                       data-testid="input-search-enemies"
@@ -69,7 +69,7 @@ export default function Home() {
                       onCheckedChange={setActiveOnly}
                       data-testid="switch-active-only"
                     />
-                    <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Active Only</Label>
+                    <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Living Only</Label>
                   </div>
                 </div>
                 <AddEnemyForm onAdd={addEnemy} />
@@ -89,8 +89,8 @@ export default function Home() {
                   ))}
                 </AnimatePresence>
                 {filteredEnemies.length === 0 && (
-                  <div className="col-span-full py-12 text-center text-muted-foreground border border-dashed border-border/50 rounded-xl bg-card/20 backdrop-blur-sm">
-                    <p className="font-mono text-sm uppercase tracking-widest opacity-50">No targets found on sensors.</p>
+                  <div className="col-span-full py-12 text-center text-muted-foreground border border-dashed border-border/50 rounded-xl bg-card/20">
+                    <p className="font-mono text-sm uppercase tracking-widest opacity-50">No foes remain in sight.</p>
                   </div>
                 )}
               </div>

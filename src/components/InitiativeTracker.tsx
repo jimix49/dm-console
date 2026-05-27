@@ -18,26 +18,26 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
 
   if (initList.length === 0) {
     return (
-      <div className="sci-fi-panel border border-border rounded-xl p-4 h-full flex flex-col">
-        <h2 className="font-mono uppercase tracking-widest text-sm text-primary mb-4 border-b border-border pb-2">Initiative Order</h2>
+      <div className="medieval-panel border border-border rounded-xl p-4 h-full flex flex-col">
+        <h2 className="font-mono uppercase tracking-widest text-sm text-primary mb-4 border-b border-border pb-2">Combat Order</h2>
         <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm font-mono text-center p-4 opacity-50 border border-dashed border-border/50 rounded-lg bg-card/20">
-          No units have initiative assigned.
+          No combatants have initiative.
         </div>
       </div>
     );
   }
 
   return (
-    <div className="sci-fi-panel border border-border rounded-xl flex flex-col h-[calc(100vh-200px)]">
+    <div className="medieval-panel border border-border rounded-xl flex flex-col h-[calc(100vh-200px)]">
       <div className="p-4 border-b border-border bg-card/60 flex justify-between items-center shrink-0">
-        <h2 className="font-mono uppercase tracking-widest text-sm text-primary">Tactical Order</h2>
+        <h2 className="font-mono uppercase tracking-widest text-sm text-primary">Turn Order</h2>
         <Button 
           size="sm" 
           onClick={nextTurn}
           className="h-7 text-xs font-mono uppercase bg-primary hover:bg-primary/80 text-primary-foreground tracking-wider"
           data-testid="button-next-turn"
         >
-          Next Turn <ChevronRight className="w-3 h-3 ml-1" />
+          Advance <ChevronRight className="w-3 h-3 ml-1" />
         </Button>
       </div>
       

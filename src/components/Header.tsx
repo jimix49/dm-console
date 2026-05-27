@@ -31,10 +31,10 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
   };
 
   const handleReset = () => {
-    if (confirm('Initiate complete system wipe? This cannot be undone.')) {
+    if (confirm('Purge the current encounter? This cannot be undone.')) {
       clearEncounter();
-      toast('System wiped. Ready for new input.', {
-        style: { background: 'hsl(var(--destructive)/0.2)', border: '1px solid hsl(var(--destructive))', color: 'hsl(var(--destructive-foreground))' }
+      toast('Encounter cleared. Ready for a new crusade.', {
+        style: { background: 'hsl(var(--destructive)/0.18)', border: '1px solid hsl(var(--destructive))', color: 'hsl(var(--destructive-foreground))' }
       });
     }
   };
@@ -44,7 +44,7 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 text-primary font-black uppercase tracking-widest">
           <ShieldAlert className="w-5 h-5" />
-          <span className="hidden sm:inline">Tactical_OS</span>
+          <span className="hidden sm:inline">Battle Ledger</span>
         </div>
         
         <div className="w-[1px] h-6 bg-border mx-2" />
@@ -56,7 +56,7 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
               onChange={e => setTempName(e.target.value)}
               onBlur={handleSaveName}
               onKeyDown={e => e.key === 'Enter' && handleSaveName()}
-              className="h-7 w-48 bg-card/70 border-primary font-mono text-sm uppercase"
+              className="h-7 w-48 bg-card/70 border-secondary font-mono text-sm uppercase"
               autoFocus
             />
           ) : (
@@ -72,14 +72,14 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
 
       <div className="flex items-center gap-2 sm:gap-4">
         <div className="hidden md:flex items-center gap-2 text-[10px] font-mono uppercase text-primary/50 mr-4">
-          <Cpu className="w-3 h-3 animate-pulse" /> Auto-sync active
+          <Cpu className="w-3 h-3 animate-pulse" /> Quill ready
         </div>
         
         <Button variant="ghost" size="sm" onClick={handleSaveSnapshot} className="h-8 font-mono text-xs hover:bg-primary/10 hover:text-primary text-muted-foreground" data-testid="button-save-encounter">
-          <Save className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Save</span>
+          <Save className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Record</span>
         </Button>
         <Button variant="ghost" size="sm" onClick={handleReset} className="h-8 font-mono text-xs hover:bg-destructive/10 hover:text-destructive text-muted-foreground" data-testid="button-reset-encounter">
-          <RotateCcw className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Wipe</span>
+          <RotateCcw className="w-3.5 h-3.5 mr-2" /> <span className="hidden sm:inline">Purge</span>
         </Button>
         
         <div className="w-[1px] h-6 bg-border mx-1" />
@@ -90,11 +90,11 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
           onClick={() => setDiceOpen(!diceOpen)}
           className={cn(
             "h-8 font-mono text-xs tracking-wider transition-all",
-            diceOpen ? "bg-primary text-primary-foreground shadow-[0_0_10px_rgba(0,255,255,0.4)]" : "border-primary/30 text-primary hover:bg-primary/10"
+            diceOpen ? "bg-primary text-primary-foreground" : "border-primary/30 text-primary hover:bg-primary/10"
           )}
           data-testid="button-toggle-dice"
         >
-          <Dices className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">RNG Matrix</span>
+          <Dices className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Dice Hall</span>
         </Button>
       </div>
     </header>
