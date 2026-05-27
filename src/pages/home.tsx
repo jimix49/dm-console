@@ -56,7 +56,7 @@ export default function Home() {
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input 
                       placeholder="Search enemies..." 
-                      className="pl-9 bg-black/40 border-primary/20 focus-visible:ring-primary font-mono text-sm"
+                      className="pl-9 bg-card/60 border-primary/20 focus-visible:ring-primary font-mono text-sm"
                       value={search}
                       onChange={e => setSearch(e.target.value)}
                       data-testid="input-search-enemies"

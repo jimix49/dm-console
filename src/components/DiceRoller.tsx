@@ -25,7 +25,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           className="fixed inset-y-0 right-0 w-full sm:w-96 z-50 flex flex-col bg-card border-l border-border sci-fi-panel shadow-[-10px_0_30px_rgba(0,0,0,0.5)]"
         >
-          <div className="p-4 border-b border-border bg-black/40 flex justify-between items-center">
+          <div className="p-4 border-b border-border bg-card/60 flex justify-between items-center">
             <div className="flex items-center gap-2 text-primary font-mono uppercase tracking-widest text-sm">
               <Dices className="w-4 h-4" /> Probability Matrix
             </div>
@@ -51,7 +51,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                       d{d}
                     </Button>
                   ))}
-                  <div className="flex items-center gap-1 border border-border rounded-md px-2 bg-black/20">
+                  <div className="flex items-center gap-1 border border-border rounded-md px-2 bg-card/20">
                     <span className="text-[10px] text-muted-foreground font-mono">+/-</span>
                     <Input 
                       type="number" 
@@ -64,7 +64,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
               </div>
 
               {/* Pending Roll */}
-              <div className="bg-black/30 border border-primary/30 rounded-xl p-4 relative overflow-hidden">
+              <div className="bg-card/30 border border-primary/30 rounded-xl p-4 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
                 <h3 className="text-[10px] uppercase font-mono text-primary/70 mb-2 tracking-wider">Queued Sequence</h3>
                 
@@ -113,7 +113,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                       value={dice.manualExpression}
                       onChange={e => dice.setManualExpression(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && dice.rollManual()}
-                      className="pl-7 bg-black/40 border-border font-mono text-xs focus-visible:border-primary"
+                      className="pl-7 bg-card/60 border-border font-mono text-xs focus-visible:border-primary"
                     />
                   </div>
                   <Button variant="secondary" onClick={dice.rollManual} disabled={!dice.manualExpression || dice.isRolling} className="font-mono text-xs">
@@ -123,7 +123,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
               </div>
             </div>
 
-            <div className="flex-1 bg-black/50 border-t border-border overflow-hidden flex flex-col">
+            <div className="flex-1 bg-card/60 border-t border-border overflow-hidden flex flex-col">
               <div className="p-3 border-b border-border/50 flex justify-between items-center">
                 <span className="text-[10px] uppercase font-mono text-muted-foreground flex items-center gap-1">
                   <Clock className="w-3 h-3" /> Telemetry Log
@@ -140,7 +140,7 @@ export default function DiceRoller({ isOpen, onClose, dice }: DiceRollerProps) {
                         key={result.id}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`p-3 rounded border font-mono ${idx === 0 ? 'bg-primary/10 border-primary/40 shadow-[0_0_10px_rgba(0,255,255,0.05)]' : 'bg-card/50 border-border/50'}`}
+                        className={`p-3 rounded border font-mono ${idx === 0 ? 'bg-primary/10 border-primary/40 shadow-[0_0_10px_rgba(220,150,20,0.12)]' : 'bg-card/50 border-border/50'}`}
                       >
                         <div className="flex justify-between items-start mb-2">
                           <span className="text-xs text-muted-foreground truncate max-w-[150px]">{result.expression}</span>

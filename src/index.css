@@ -49,45 +49,45 @@
 }
 
 :root {
-  /* Always dark sci-fi mode */
-  --background: 215 40% 4%;
-  --foreground: 210 20% 90%;
-  --border: 195 80% 35% / 0.3;
-  --input: 195 80% 35% / 0.4;
-  --ring: 195 100% 50% / 0.5;
+  /* Warm parchment and timber theme */
+  --background: 34 25% 10%;
+  --foreground: 35 20% 92%;
+  --border: 34 30% 20% / 0.55;
+  --input: 34 28% 18% / 0.55;
+  --ring: 42 40% 65% / 0.45;
 
-  --card: 215 30% 8%;
-  --card-foreground: 210 20% 90%;
-  --card-border: 195 80% 35% / 0.3;
+  --card: 30 25% 12%;
+  --card-foreground: 35 18% 92%;
+  --card-border: 34 25% 18% / 0.7;
 
-  --popover: 215 35% 6%;
-  --popover-foreground: 210 20% 90%;
-  --popover-border: 195 80% 35% / 0.3;
+  --popover: 30 24% 14%;
+  --popover-foreground: 35 18% 92%;
+  --popover-border: 34 24% 20% / 0.7;
 
-  --primary: 195 100% 50%;
-  --primary-foreground: 215 40% 4%;
-  --primary-border: 195 100% 50%;
+  --primary: 34 72% 56%;
+  --primary-foreground: 35 18% 8%;
+  --primary-border: 34 72% 45%;
 
-  --secondary: 215 25% 15%;
-  --secondary-foreground: 210 20% 90%;
-  --secondary-border: 215 25% 25%;
+  --secondary: 35 35% 38%;
+  --secondary-foreground: 35 18% 92%;
+  --secondary-border: 35 35% 26%;
 
-  --muted: 215 20% 12%;
-  --muted-foreground: 215 15% 55%;
-  --muted-border: 215 20% 18%;
+  --muted: 35 18% 32%;
+  --muted-foreground: 35 18% 70%;
+  --muted-border: 34 18% 26%;
 
-  --accent: 195 100% 50%;
-  --accent-foreground: 215 40% 4%;
-  --accent-border: 195 100% 50%;
+  --accent: 32 30% 45%;
+  --accent-foreground: 35 18% 92%;
+  --accent-border: 35 30% 36%;
 
-  --destructive: 0 80% 50%;
-  --destructive-foreground: 210 20% 90%;
-  --destructive-border: 0 80% 50%;
+  --destructive: 358 70% 48%;
+  --destructive-foreground: 35 18% 92%;
+  --destructive-border: 358 70% 35%;
 
-  --healing: 145 80% 45%;
-  --warning: 38 92% 55%;
+  --healing: 110 30% 65%;
+  --warning: 42 78% 55%;
 
-  --radius: 0.25rem;
+  --radius: 0.5rem;
 
   --app-font-sans: "Space Grotesk", "Inter", sans-serif;
   --app-font-mono: "Space Mono", "JetBrains Mono", monospace;
@@ -99,23 +99,28 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      radial-gradient(circle at top left, rgba(255, 255, 255, 0.06), transparent 18%),
+                      radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.045), transparent 15%);
+    background-size: 40px 40px, 40px 40px, 280px 280px, 260px 260px;
     background-attachment: fixed;
+    background-color: hsl(var(--background));
   }
 }
 
 .sci-fi-glow {
-  box-shadow: 0 0 10px hsl(var(--primary) / 0.2), inset 0 0 10px hsl(var(--primary) / 0.1);
+  box-shadow: 0 0 16px hsl(var(--primary) / 0.14), inset 0 0 16px hsl(var(--primary) / 0.08);
 }
 
 .sci-fi-glow-hover:hover {
-  box-shadow: 0 0 15px hsl(var(--primary) / 0.4), inset 0 0 15px hsl(var(--primary) / 0.2);
+  box-shadow: 0 0 20px hsl(var(--primary) / 0.2), inset 0 0 20px hsl(var(--primary) / 0.1);
   border-color: hsl(var(--primary));
 }
 
 .sci-fi-panel {
-  backdrop-filter: blur(12px);
-  background: linear-gradient(135deg, hsl(var(--card) / 0.8), hsl(var(--card) / 0.95));
+  backdrop-filter: blur(2px);
+  background: linear-gradient(145deg, hsl(var(--card) / 0.95), hsl(var(--card) / 1));
+  border: 1px solid hsl(var(--card-border));
+  box-shadow: inset 0 0 0 1px hsla(0, 0%, 100%, 0.04), 0 20px 40px rgba(0, 0, 0, 0.12);
 }

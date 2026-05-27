@@ -20,7 +20,7 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
     return (
       <div className="sci-fi-panel border border-border rounded-xl p-4 h-full flex flex-col">
         <h2 className="font-mono uppercase tracking-widest text-sm text-primary mb-4 border-b border-border pb-2">Initiative Order</h2>
-        <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm font-mono text-center p-4 opacity-50 border border-dashed border-border/50 rounded-lg">
+        <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm font-mono text-center p-4 opacity-50 border border-dashed border-border/50 rounded-lg bg-card/20">
           No units have initiative assigned.
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
 
   return (
     <div className="sci-fi-panel border border-border rounded-xl flex flex-col h-[calc(100vh-200px)]">
-      <div className="p-4 border-b border-border bg-black/40 flex justify-between items-center shrink-0">
+      <div className="p-4 border-b border-border bg-card/60 flex justify-between items-center shrink-0">
         <h2 className="font-mono uppercase tracking-widest text-sm text-primary">Tactical Order</h2>
         <Button 
           size="sm" 
@@ -58,8 +58,8 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
                 className={cn(
                   "p-2 rounded-lg border flex items-center gap-3 cursor-pointer transition-all relative overflow-hidden group",
                   isActive 
-                    ? "bg-primary/10 border-primary shadow-[0_0_10px_rgba(0,255,255,0.1)]" 
-                    : "bg-black/20 border-white/5 hover:border-white/20",
+                    ? "bg-primary/10 border-primary shadow-[0_0_10px_rgba(220,150,20,0.12)]" 
+                    : "bg-card/20 border-border/40 hover:border-primary/50",
                   isDefeated && !isActive ? "opacity-40" : ""
                 )}
                 data-testid={`init-item-${enemy.id}`}
@@ -68,7 +68,7 @@ export default function InitiativeTracker({ encounter, nextTurn, setActiveTurnId
                   <motion.div layoutId="active-indicator" className="absolute left-0 top-0 bottom-0 w-1 bg-primary shadow-[0_0_8px_rgba(0,255,255,0.8)]" />
                 )}
                 
-                <div className="w-8 h-8 rounded bg-black/50 border border-white/10 flex items-center justify-center font-mono font-bold text-sm text-primary group-hover:border-primary/50 transition-colors shrink-0">
+                <div className="w-8 h-8 rounded bg-card/40 border border-border/40 flex items-center justify-center font-mono font-bold text-sm text-primary group-hover:border-primary/50 transition-colors shrink-0">
                   {enemy.initiative}
                 </div>
                 

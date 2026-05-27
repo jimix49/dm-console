@@ -40,7 +40,7 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
   };
 
   return (
-    <header className="h-14 border-b border-border/50 bg-black/60 backdrop-blur-md flex items-center justify-between px-4 z-20 shrink-0 sticky top-0">
+    <header className="h-14 border-b border-border/50 bg-card/90 backdrop-blur-md flex items-center justify-between px-4 z-20 shrink-0 sticky top-0">
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 text-primary font-black uppercase tracking-widest">
           <ShieldAlert className="w-5 h-5" />
@@ -56,7 +56,7 @@ export default function Header({ encounterName, setEncounterName, clearEncounter
               onChange={e => setTempName(e.target.value)}
               onBlur={handleSaveName}
               onKeyDown={e => e.key === 'Enter' && handleSaveName()}
-              className="h-7 w-48 bg-black/40 border-primary font-mono text-sm uppercase"
+              className="h-7 w-48 bg-card/70 border-primary font-mono text-sm uppercase"
               autoFocus
             />
           ) : (

@@ -38,9 +38,9 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
   
   const getHpColor = () => {
     if (isDefeated) return 'bg-muted-foreground/30';
-    if (hpPercent > 60) return 'bg-primary shadow-[0_0_10px_rgba(0,255,255,0.6)]';
-    if (hpPercent > 30) return 'bg-warning shadow-[0_0_10px_rgba(255,160,0,0.6)]';
-    return 'bg-destructive shadow-[0_0_10px_rgba(255,0,0,0.6)] animate-pulse';
+    if (hpPercent > 60) return 'bg-primary shadow-[0_0_10px_rgba(220,150,20,0.18)]';
+    if (hpPercent > 30) return 'bg-warning shadow-[0_0_10px_rgba(220,150,20,0.2)]';
+    return 'bg-destructive shadow-[0_0_10px_rgba(180,30,30,0.3)] animate-pulse';
   };
 
   const handleModifyHp = (amount: number) => {
@@ -97,8 +97,8 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.2 }}
       className={cn(
-        "relative rounded-xl border sci-fi-panel overflow-hidden transition-all",
-        isActiveTurn ? "border-primary shadow-[0_0_15px_rgba(0,255,255,0.2)]" : "border-border/50",
+        "relative rounded-xl border bg-card/80 overflow-hidden transition-all",
+        isActiveTurn ? "border-primary shadow-[0_0_15px_rgba(218,165,32,0.18)]" : "border-border/50",
         isDefeated ? "opacity-70 grayscale-[0.5]" : ""
       )}
       data-testid={`card-enemy-${enemy.id}`}
@@ -118,7 +118,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
       </AnimatePresence>
 
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-border/30 bg-black/20">
+      <div className="flex items-center justify-between p-3 border-b border-border/30 bg-card/20">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full" onClick={() => setCollapsed(!collapsed)} data-testid={`button-collapse-${enemy.id}`}>
             {collapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
@@ -127,7 +127,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
             <Input 
               value={editName} 
               onChange={e => setEditName(e.target.value)}
-              className="h-7 text-sm font-bold bg-black/50 border-primary/50 w-32"
+              className="h-7 text-sm font-bold bg-card/60 border-primary/50 w-32"
               autoFocus
             />
           ) : (
@@ -150,7 +150,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                 <Edit2 className="h-3 w-3" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40 bg-card border-border sci-fi-panel">
+            <DropdownMenuContent align="end" className="w-40 bg-card border-border">
               <DropdownMenuItem onClick={() => setIsEditing(!isEditing)} className="cursor-pointer font-mono text-xs">
                 <Edit2 className="mr-2 h-3 w-3" /> Edit Stats
               </DropdownMenuItem>
@@ -184,7 +184,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                       {enemy.currentHp} / {enemy.maxHp}
                     </span>
                   </div>
-                  <div className="h-2 w-full bg-black/60 rounded-full overflow-hidden border border-white/5">
+                  <div className="h-2 w-full bg-card/60 rounded-full overflow-hidden border border-border/30">
                     <motion.div 
                       className={cn("h-full transition-all duration-500", getHpColor())}
                       initial={{ width: 0 }}
@@ -192,7 +192,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center bg-black/40 border border-primary/20 rounded-lg p-2 min-w-[60px] relative overflow-hidden group">
+                <div className="flex flex-col items-center justify-center bg-card/30 border border-primary/20 rounded-lg p-2 min-w-[60px] relative overflow-hidden group">
                   <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
                   {isEditing ? (
                     <Input value={editAc} onChange={e => setEditAc(e.target.value)} className="h-6 w-10 text-center p-0 text-sm font-mono border-primary/50" />
@@ -207,7 +207,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
 
               {/* HP Controls */}
               {!isEditing && (
-                <div className="space-y-3 p-3 bg-black/20 rounded-lg border border-white/5">
+                <div className="space-y-3 p-3 bg-card/20 rounded-lg border border-border/30">
                   <div className="flex flex-wrap gap-1">
                     {[-10, -5, -1].map(val => (
                       <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[48px] h-8 text-xs font-mono border-destructive/20 hover:bg-destructive/20 hover:text-destructive hover:border-destructive/50 transition-colors" data-testid={`btn-dmg-${val}-${enemy.id}`}>
@@ -227,7 +227,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                       placeholder="Amt" 
                       value={damageInput} 
                       onChange={e => setDamageInput(e.target.value)}
-                      className="h-8 font-mono text-center bg-black/40 border-primary/20 w-16"
+                      className="h-8 font-mono text-center bg-card/60 border-primary/20 w-16"
                       data-testid={`input-manual-dmg-${enemy.id}`}
                     />
                     <Button onClick={() => applyDamageInput(false)} className="flex-1 h-8 bg-destructive/10 text-destructive border border-destructive/30 hover:bg-destructive hover:text-foreground text-xs uppercase tracking-widest" data-testid={`btn-apply-dmg-${enemy.id}`}>
@@ -242,7 +242,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
 
               {/* Editing Extra Fields */}
               {isEditing && (
-                <div className="grid grid-cols-2 gap-2 p-3 bg-black/40 rounded-lg border border-primary/20">
+                <div className="grid grid-cols-2 gap-2 p-3 bg-card/30 rounded-lg border border-primary/20">
                   <div className="space-y-1">
                     <span className="text-[10px] uppercase text-muted-foreground font-mono">Max HP</span>
                     <Input value={editHp} onChange={e => setEditHp(e.target.value)} className="h-7 text-sm font-mono border-primary/50" />
@@ -270,7 +270,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                           "cursor-pointer text-[10px] uppercase font-mono transition-colors",
                           enemy.conditions.includes(cond) 
                             ? "bg-warning/20 text-warning border-warning" 
-                            : "bg-black/30 border-white/10 text-muted-foreground hover:border-white/30"
+                            : "bg-card/30 border-border/40 text-muted-foreground hover:border-border"
                         )}
                         onClick={() => toggleCondition(cond)}
                         data-testid={`badge-cond-${cond}-${enemy.id}`}
@@ -294,7 +294,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                       value={tagInput}
                       onChange={e => setTagInput(e.target.value)}
                       onKeyDown={addTag}
-                      className="h-5 w-20 text-[10px] px-1 py-0 bg-transparent border-dashed border-white/20 focus-visible:ring-0 focus-visible:border-primary font-mono"
+                      className="h-5 w-20 text-[10px] px-1 py-0 bg-transparent border-dashed border-border/20 focus-visible:ring-0 focus-visible:border-primary font-mono"
                       data-testid={`input-add-tag-${enemy.id}`}
                     />
                   </div>
@@ -308,7 +308,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
       {/* Compact View Summary */}
       {collapsed && (
         <div className="px-3 pb-2 pt-1">
-          <div className="h-1 w-full bg-black/60 rounded-full overflow-hidden">
+          <div className="h-1 w-full bg-card/60 rounded-full overflow-hidden">
             <div className={cn("h-full transition-all", getHpColor())} style={{ width: `${hpPercent}%` }} />
           </div>
         </div>
