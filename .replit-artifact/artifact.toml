@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "DM Combat Console"
+version = "1.0.0"
+id = "artifacts/dm-console"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24386
+
+[services.development]
+run = "pnpm --filter @workspace/dm-console run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/dm-console", "run", "build" ]
+publicDir = "artifacts/dm-console/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24386"
+BASE_PATH = "/"

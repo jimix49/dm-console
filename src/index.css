@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-healing: hsl(var(--healing));
+  --color-warning: hsl(var(--warning));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Always dark sci-fi mode */
+  --background: 215 40% 4%;
+  --foreground: 210 20% 90%;
+  --border: 195 80% 35% / 0.3;
+  --input: 195 80% 35% / 0.4;
+  --ring: 195 100% 50% / 0.5;
+
+  --card: 215 30% 8%;
+  --card-foreground: 210 20% 90%;
+  --card-border: 195 80% 35% / 0.3;
+
+  --popover: 215 35% 6%;
+  --popover-foreground: 210 20% 90%;
+  --popover-border: 195 80% 35% / 0.3;
+
+  --primary: 195 100% 50%;
+  --primary-foreground: 215 40% 4%;
+  --primary-border: 195 100% 50%;
+
+  --secondary: 215 25% 15%;
+  --secondary-foreground: 210 20% 90%;
+  --secondary-border: 215 25% 25%;
+
+  --muted: 215 20% 12%;
+  --muted-foreground: 215 15% 55%;
+  --muted-border: 215 20% 18%;
+
+  --accent: 195 100% 50%;
+  --accent-foreground: 215 40% 4%;
+  --accent-border: 195 100% 50%;
+
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 210 20% 90%;
+  --destructive-border: 0 80% 50%;
+
+  --healing: 145 80% 45%;
+  --warning: 38 92% 55%;
+
+  --radius: 0.25rem;
+
+  --app-font-sans: "Space Grotesk", "Inter", sans-serif;
+  --app-font-mono: "Space Mono", "JetBrains Mono", monospace;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased overflow-x-hidden;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-attachment: fixed;
+  }
+}
+
+.sci-fi-glow {
+  box-shadow: 0 0 10px hsl(var(--primary) / 0.2), inset 0 0 10px hsl(var(--primary) / 0.1);
+}
+
+.sci-fi-glow-hover:hover {
+  box-shadow: 0 0 15px hsl(var(--primary) / 0.4), inset 0 0 15px hsl(var(--primary) / 0.2);
+  border-color: hsl(var(--primary));
+}
+
+.sci-fi-panel {
+  backdrop-filter: blur(12px);
+  background: linear-gradient(135deg, hsl(var(--card) / 0.8), hsl(var(--card) / 0.95));
+}
