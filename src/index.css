@@ -87,7 +87,7 @@
   --healing: 130 35% 48%;
   --warning: 34 80% 48%;
 
-  --radius: 0.5rem;
+  --radius: 0.2rem;
 
   --app-font-sans: ui-serif, Georgia, Cambria, "Times New Roman", serif;
   --app-font-mono: "JetBrains Mono", "Fira Code", monospace;
@@ -99,12 +99,12 @@
   }
   body {
     @apply bg-background text-foreground antialiased overflow-x-hidden;
-    font-family: ui-serif, Georgia, Cambria, "Times New Roman", serif;
-    background-image: linear-gradient(rgba(255, 245, 225, 0.06) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255, 245, 225, 0.06) 1px, transparent 1px),
-                      linear-gradient(180deg, rgba(255, 245, 210, 0.08), transparent 65%),
-                      radial-gradient(circle at top left, rgba(255, 240, 190, 0.14), transparent 18%);
-    background-size: 36px 36px, 36px 36px, 100% 250px, 260px 260px;
+    font-family: Georgia, Cambria, "Times New Roman", serif !important;
+    background-image: repeating-linear-gradient(90deg, #2a1810 0px, #3d2817 2px, #291610 4px, #3a2612 6px, #2a1810 8px),
+                      repeating-linear-gradient(0deg, rgba(0,0,0,0.3) 0px, transparent 2px, rgba(255,255,255,0.1) 4px, transparent 6px),
+                      linear-gradient(90deg, rgba(139,69,19,0.15) 0%, rgba(160,82,45,0.1) 50%, rgba(139,69,19,0.15) 100%),
+                      linear-gradient(180deg, rgba(255, 245, 210, 0.05), transparent 50%);
+    background-size: 8px 100%, 100% 4px, 100% 100%, 100% 100%;
     background-attachment: fixed;
     background-color: hsl(var(--background));
   }

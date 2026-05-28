@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useEncounter } from '@/hooks/use-encounter';
 import { useDice } from '@/hooks/use-dice';
 import Header from '@/components/Header';
@@ -11,6 +11,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 
 export default function Home() {
   const { 
@@ -22,13 +23,42 @@ export default function Home() {
     setEncounterName, 
     clearEncounter,
     nextTurn,
-    setActiveTurnId
+    setActiveTurnId,
+    loadEncounter
   } = useEncounter();
 
   const dice = useDice();
   const [search, setSearch] = useState('');
   const [activeOnly, setActiveOnly] = useState(false);
   const [diceOpen, setDiceOpen] = useState(false);
+
+  const handleExportEncounter = useCallback(() => {
+    const payload = JSON.stringify(encounter);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    const safeName = encounter.name.trim() ? encounter.name.replace(/[^a-z0-9_-]/gi, '_').toLowerCase() : 'battle-state';
+
+    anchor.href = url;
+    anchor.download = `${safeName}-${Date.now()}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+    toast.success('Battle exported as JSON.');
+  }, [encounter]);
+
+  const handleImportEncounter = useCallback(async (file: File) => {
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      loadEncounter(parsed);
+      toast.success('Battle imported successfully.');
+    } catch (error) {
+      console.error('Encounter import failed', error);
+      toast.error('Unable to import this battle state.');
+    }
+  }, [loadEncounter]);
 
   const filteredEnemies = encounter.enemies.filter(e => {
     if (activeOnly && e.currentHp <= 0) return false;
@@ -42,6 +72,8 @@ export default function Home() {
         encounterName={encounter.name} 
         setEncounterName={setEncounterName}
         clearEncounter={clearEncounter}
+        onExport={handleExportEncounter}
+        onImport={handleImportEncounter}
         diceOpen={diceOpen}
         setDiceOpen={setDiceOpen}
       />

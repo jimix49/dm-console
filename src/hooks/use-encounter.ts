@@ -4,6 +4,33 @@ import { v4 as uuidv4 } from 'uuid';
 
 const STORAGE_KEY = 'dm-console-encounters';
 
+const isStringArray = (value: unknown): value is string[] => Array.isArray(value) && value.every(item => typeof item === 'string');
+
+const isEnemy = (value: unknown): value is Enemy => {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Record<string, unknown>;
+
+  return typeof candidate.id === 'string'
+    && typeof candidate.name === 'string'
+    && typeof candidate.maxHp === 'number'
+    && typeof candidate.currentHp === 'number'
+    && typeof candidate.ac === 'number'
+    && (typeof candidate.initiative === 'number' || candidate.initiative === null)
+    && isStringArray(candidate.conditions)
+    && isStringArray(candidate.tags);
+};
+
+const isEncounter = (value: unknown): value is Encounter => {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Record<string, unknown>;
+
+  return typeof candidate.id === 'string'
+    && typeof candidate.name === 'string'
+    && (candidate.activeTurnId === null || typeof candidate.activeTurnId === 'string')
+    && Array.isArray(candidate.enemies)
+    && candidate.enemies.every(isEnemy);
+};
+
 export function useEncounter() {
   const [encounter, setEncounter] = useState<Encounter>(() => {
     try {
@@ -76,6 +103,13 @@ export function useEncounter() {
     setEncounter(prev => ({ ...prev, activeTurnId: id }));
   }, []);
 
+  const loadEncounter = useCallback((incoming: unknown) => {
+    if (!isEncounter(incoming)) {
+      throw new Error('Invalid battle file.');
+    }
+    setEncounter(incoming);
+  }, []);
+
   return {
     encounter,
     addEnemy,
@@ -85,6 +119,7 @@ export function useEncounter() {
     setEncounterName,
     clearEncounter,
     nextTurn,
-    setActiveTurnId
+    setActiveTurnId,
+    loadEncounter
   };
 }
