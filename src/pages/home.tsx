@@ -194,7 +194,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 auto-rows-max overflow-y-auto custom-scrollbar pr-2 flex-1">
+            <div className="grid grid-cols-3 gap-3 auto-rows-max overflow-y-auto custom-scrollbar pr-2 flex-1">
               <AnimatePresence>
                 {filteredEnemies.map(enemy => (
                   enemy.isPlayer ? (
