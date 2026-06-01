@@ -11,6 +11,15 @@ export interface Enemy {
   initiative: number | null;
   conditions: string[];
   tags: string[];
+  // Optional fields for player characters stored alongside enemies
+  isPlayer?: boolean;
+  imageBase64?: string | null;
+  deathSaves?: {
+    successes: number;
+    failures: number;
+  } | null;
+  // If this combatant was created from a glossary entry, store its glossary id
+  glossaryId?: string | null;
 }
 
 export interface Encounter {

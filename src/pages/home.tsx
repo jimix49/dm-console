@@ -4,7 +4,9 @@ import { useDice } from '@/hooks/use-dice';
 import Header from '@/components/Header';
 import AddEnemyForm from '@/components/AddEnemyForm';
 import EnemyCard from '@/components/EnemyCard';
+import PlayerCard from '@/components/PlayerCard';
 import InitiativeTracker from '@/components/InitiativeTracker';
+import GlossaryPanel from '@/components/GlossaryPanel';
 import DiceRoller from '@/components/DiceRoller';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
@@ -12,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
+import useGlossary from '@/hooks/use-glossary';
 
 export default function Home() {
   const { 
@@ -26,6 +29,8 @@ export default function Home() {
     setActiveTurnId,
     loadEncounter
   } = useEncounter();
+
+  const { updateEntry: updateGlossaryEntry, addEntry: addGlossaryEntry } = useGlossary();
 
   const dice = useDice();
   const [search, setSearch] = useState('');
@@ -66,6 +71,33 @@ export default function Home() {
     return true;
   });
 
+  // Wrapped addEnemy: accept optional glossaryId passed from AddEnemyForm or GlossaryPanel
+  const handleAddEnemy = (enemy: any) => {
+    addEnemy(enemy);
+  };
+
+  // Wrapped update: update encounter then sync back to glossary if linked
+  const handleUpdateEnemy = (id: string, updates: Partial<any>) => {
+    const existing = encounter.enemies.find(e => e.id === id);
+    if (!existing) return;
+    const merged = { ...existing, ...updates };
+    updateEnemy(id, updates);
+    if (existing.glossaryId) {
+      updateGlossaryEntry(existing.glossaryId, {
+        name: merged.name,
+        maxHp: merged.maxHp,
+        currentHp: merged.currentHp,
+        ac: merged.ac,
+        initiative: merged.initiative,
+        conditions: merged.conditions,
+        tags: merged.tags,
+        isPlayer: merged.isPlayer,
+        imageBase64: merged.imageBase64,
+        deathSaves: merged.deathSaves
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col font-sans overflow-hidden">
       <Header 
@@ -104,20 +136,31 @@ export default function Home() {
                     <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Living Only</Label>
                   </div>
                 </div>
-                <AddEnemyForm onAdd={addEnemy} />
+                <AddEnemyForm onAdd={handleAddEnemy} />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-max overflow-y-auto pb-24 h-[calc(100vh-200px)] custom-scrollbar pr-2">
                 <AnimatePresence>
                   {filteredEnemies.map(enemy => (
-                    <EnemyCard 
-                      key={enemy.id} 
-                      enemy={enemy} 
-                      onUpdate={(updates) => updateEnemy(enemy.id, updates)}
-                      onRemove={() => removeEnemy(enemy.id)}
-                      onDuplicate={() => duplicateEnemy(enemy.id)}
-                      isActiveTurn={encounter.activeTurnId === enemy.id}
-                    />
+                    enemy.isPlayer ? (
+                      <PlayerCard
+                        key={enemy.id}
+                        enemy={enemy}
+                        onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
+                        onRemove={() => removeEnemy(enemy.id)}
+                        onDuplicate={() => duplicateEnemy(enemy.id)}
+                        isActiveTurn={encounter.activeTurnId === enemy.id}
+                      />
+                    ) : (
+                      <EnemyCard 
+                        key={enemy.id} 
+                        enemy={enemy} 
+                        onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
+                        onRemove={() => removeEnemy(enemy.id)}
+                        onDuplicate={() => duplicateEnemy(enemy.id)}
+                        isActiveTurn={encounter.activeTurnId === enemy.id}
+                      />
+                    )
                   ))}
                 </AnimatePresence>
                 {filteredEnemies.length === 0 && (
@@ -128,12 +171,13 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="hidden xl:block w-80 flex-shrink-0">
+            <div className="hidden xl:flex flex-col w-80 flex-shrink-0 gap-4">
                <InitiativeTracker 
                  encounter={encounter} 
                  nextTurn={nextTurn}
                  setActiveTurnId={setActiveTurnId}
                />
+               <GlossaryPanel />
             </div>
           </div>
         </div>

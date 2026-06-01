@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus } from 'lucide-react';
 import { Enemy } from '@/lib/types';
+import useGlossary from '@/hooks/use-glossary';
 import {
   Dialog,
   DialogContent,
@@ -12,24 +13,43 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from '@/components/ui/label';
 
-export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => void }) {
+export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'> & { glossaryId?: string | null }) => void }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [hp, setHp] = useState('');
   const [ac, setAc] = useState('');
   const [init, setInit] = useState('');
+  const [saveToGlossary, setSaveToGlossary] = useState(false);
+  const { addEntry } = useGlossary();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !hp || !ac) return;
-    
-    onAdd({
+    const payload: any = {
       name,
       maxHp: parseInt(hp),
       currentHp: parseInt(hp),
       ac: parseInt(ac),
       initiative: init ? parseInt(init) : null,
-    });
+    };
+
+    if (saveToGlossary) {
+      const created = addEntry({
+        name: payload.name,
+        maxHp: payload.maxHp,
+        currentHp: payload.currentHp,
+        ac: payload.ac,
+        initiative: payload.initiative,
+        conditions: [],
+        tags: [],
+        isPlayer: false,
+        imageBase64: null,
+        deathSaves: null
+      } as Enemy);
+      payload.glossaryId = created.id;
+    }
+
+    onAdd(payload);
     
     setOpen(false);
     setName('');
@@ -67,6 +87,10 @@ export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id
           <div className="space-y-2">
             <Label htmlFor="init" className="text-xs text-muted-foreground uppercase font-mono">Initiative (Optional)</Label>
             <Input id="init" type="number" value={init} onChange={e => setInit(e.target.value)} className="bg-card/60 border-primary/30 font-mono text-center" placeholder="18" data-testid="input-enemy-init" />
+          </div>
+          <div className="flex items-center gap-2">
+            <input id="saveGlossary" type="checkbox" checked={saveToGlossary} onChange={e => setSaveToGlossary(e.target.checked)} />
+            <Label htmlFor="saveGlossary" className="text-xs text-muted-foreground">Save to Glossary</Label>
           </div>
           <Button type="submit" className="w-full bg-primary text-primary-foreground font-mono uppercase tracking-widest mt-4" data-testid="button-submit-target">Enlist</Button>
         </form>
