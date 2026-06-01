@@ -29,7 +29,7 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
 
     // If currently stabilized and taking damage, they immediately gain one failed save
     if (enemy.stabilized && amount < 0) {
-      const current = enemy.deathSaves ?? { successes: 3, failures: 0 };
+      const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
       const nextFailures = Math.min(3, current.failures + 1);
       const nextDeathSaves = { ...current, failures: nextFailures };
       if (nextFailures >= 3) {
@@ -65,9 +65,10 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
     const next = { ...current, successes: Math.min(3, current.successes + 1) };
     if (next.successes >= 3) {
-      // stabilized: remain at 0 HP, retain 3 successes and mark stabilized
-      onUpdate({ deathSaves: next, currentHp: 0, stabilized: true });
-      toast.success(`${enemy.name} stabilized (3 successes).`);
+      // stabilized: remain at 0 HP, clear success counters and mark stabilized
+      const stabilizedDeathSaves = { successes: 0, failures: next.failures ?? 0 };
+      onUpdate({ deathSaves: stabilizedDeathSaves, currentHp: 0, stabilized: true });
+      toast.success(`${enemy.name} stabilized (no longer making death saves).`);
     } else {
       onUpdate({ deathSaves: next });
     }
