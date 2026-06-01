@@ -108,30 +108,13 @@ export default function Home() {
       ...entry,
       conditions: [],
       tags: [],
-    } as Enemy);
+    });
     return created.id;
   };
 
-  // Wrapped update: update encounter then sync back to glossary if linked
+  // Wrapped update: update only the encounter state; glossary values remain fixed.
   const handleUpdateEnemy = (id: string, updates: Partial<any>) => {
-    const existing = encounter.enemies.find(e => e.id === id);
-    if (!existing) return;
-    const merged = { ...existing, ...updates };
     updateEnemy(id, updates);
-    if (existing.glossaryId) {
-      updateGlossaryEntry(existing.glossaryId, {
-        name: merged.name,
-        maxHp: merged.maxHp,
-        currentHp: merged.currentHp,
-        ac: merged.ac,
-        initiative: merged.initiative,
-        conditions: merged.conditions,
-        tags: merged.tags,
-        isPlayer: merged.isPlayer,
-        imageBase64: merged.imageBase64,
-        deathSaves: merged.deathSaves
-      });
-    }
   };
 
   return (
