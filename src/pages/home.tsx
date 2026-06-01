@@ -155,86 +155,84 @@ export default function Home() {
       />
       
       <main className="flex-1 overflow-hidden relative">
-        <div className="max-w-7xl mx-auto w-full p-4 lg:p-6 h-full">
-          <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)_280px] gap-6 h-full">
-            <aside className="sticky top-20 self-start h-[calc(100vh-160px)] overflow-hidden">
-              <GlossaryPanel
-                entries={glossaryEntries}
-                addEntry={addGlossaryEntry}
-                updateEntry={updateGlossaryEntry}
-                removeEntry={removeGlossaryEntry}
-                addEnemy={handleAddEnemy}
-              />
-            </aside>
+        <div className="w-full h-full flex gap-3 p-3">
+          <aside className="w-[20%] overflow-hidden flex-shrink-0">
+            <GlossaryPanel
+              entries={glossaryEntries}
+              addEntry={addGlossaryEntry}
+              updateEntry={updateGlossaryEntry}
+              removeEntry={removeGlossaryEntry}
+              addEnemy={handleAddEnemy}
+            />
+          </aside>
 
-            <section className="flex flex-col gap-6 h-full">
-              <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 medieval-panel p-4 rounded-xl">
-                <div className="flex items-center gap-4 flex-1 w-full xl:w-auto">
-                  <div className="relative flex-1 max-w-md">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input 
-                      placeholder="Search foes..." 
-                      className="pl-9 bg-card/60 border-secondary/30 focus-visible:ring-primary font-mono text-sm"
-                      value={search}
-                      onChange={e => setSearch(e.target.value)}
-                      data-testid="input-search-enemies"
-                    />
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Switch 
-                      id="active-only" 
-                      checked={activeOnly}
-                      onCheckedChange={setActiveOnly}
-                      data-testid="switch-active-only"
-                    />
-                    <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Living Only</Label>
-                  </div>
+          <section className="w-[60%] flex flex-col gap-3 overflow-hidden">
+            <div className="flex flex-col items-start justify-between gap-3 medieval-panel p-3 rounded-xl flex-shrink-0">
+              <div className="flex items-center gap-3 flex-1 w-full">
+                <div className="relative flex-1 max-w-xs">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input 
+                    placeholder="Search foes..." 
+                    className="pl-9 bg-card/60 border-secondary/30 focus-visible:ring-primary font-mono text-xs"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    data-testid="input-search-enemies"
+                  />
                 </div>
-                <div className="w-full xl:w-auto">
-                  <AddEnemyForm onAdd={handleAddEnemy} onCreateGlossaryEntry={handleCreateGlossaryEntry} />
+                <div className="flex items-center space-x-2">
+                  <Switch 
+                    id="active-only" 
+                    checked={activeOnly}
+                    onCheckedChange={setActiveOnly}
+                    data-testid="switch-active-only"
+                  />
+                  <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Living Only</Label>
                 </div>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 auto-rows-max overflow-y-auto pb-24 h-[calc(100vh-260px)] custom-scrollbar pr-2">
-                <AnimatePresence>
-                  {filteredEnemies.map(enemy => (
-                    enemy.isPlayer ? (
-                      <PlayerCard
-                        key={enemy.id}
-                        enemy={enemy}
-                        onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
-                        onRemove={() => removeEnemy(enemy.id)}
-                        onDuplicate={() => duplicateEnemy(enemy.id)}
-                        isActiveTurn={encounter.activeTurnId === enemy.id}
-                      />
-                    ) : (
-                      <EnemyCard 
-                        key={enemy.id} 
-                        enemy={enemy} 
-                        onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
-                        onRemove={() => removeEnemy(enemy.id)}
-                        onDuplicate={() => duplicateEnemy(enemy.id)}
-                        isActiveTurn={encounter.activeTurnId === enemy.id}
-                      />
-                    )
-                  ))}
-                </AnimatePresence>
-                {filteredEnemies.length === 0 && (
-                  <div className="col-span-full py-12 text-center text-muted-foreground border border-dashed border-border/50 rounded-xl bg-card/20">
-                    <p className="font-mono text-sm uppercase tracking-widest opacity-50">No foes remain in sight.</p>
-                  </div>
-                )}
+              <div className="w-full">
+                <AddEnemyForm onAdd={handleAddEnemy} onCreateGlossaryEntry={handleCreateGlossaryEntry} />
               </div>
-            </section>
+            </div>
 
-            <aside className="sticky top-20 self-start h-[calc(100vh-160px)] overflow-hidden">
-              <InitiativeTracker 
-                encounter={encounter} 
-                nextTurn={nextTurn}
-                setActiveTurnId={setActiveTurnId}
-              />
-            </aside>
-          </div>
+            <div className="grid grid-cols-2 gap-3 auto-rows-max overflow-y-auto custom-scrollbar pr-2 flex-1">
+              <AnimatePresence>
+                {filteredEnemies.map(enemy => (
+                  enemy.isPlayer ? (
+                    <PlayerCard
+                      key={enemy.id}
+                      enemy={enemy}
+                      onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
+                      onRemove={() => removeEnemy(enemy.id)}
+                      onDuplicate={() => duplicateEnemy(enemy.id)}
+                      isActiveTurn={encounter.activeTurnId === enemy.id}
+                    />
+                  ) : (
+                    <EnemyCard 
+                      key={enemy.id} 
+                      enemy={enemy} 
+                      onUpdate={(updates) => handleUpdateEnemy(enemy.id, updates)}
+                      onRemove={() => removeEnemy(enemy.id)}
+                      onDuplicate={() => duplicateEnemy(enemy.id)}
+                      isActiveTurn={encounter.activeTurnId === enemy.id}
+                    />
+                  )
+                ))}
+              </AnimatePresence>
+              {filteredEnemies.length === 0 && (
+                <div className="col-span-full py-12 text-center text-muted-foreground border border-dashed border-border/50 rounded-xl bg-card/20">
+                  <p className="font-mono text-xs uppercase tracking-widest opacity-50">No foes remain in sight.</p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <aside className="w-[20%] overflow-hidden flex-shrink-0">
+            <InitiativeTracker 
+              encounter={encounter} 
+              nextTurn={nextTurn}
+              setActiveTurnId={setActiveTurnId}
+            />
+          </aside>
         </div>
 
         <DiceRoller 

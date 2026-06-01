@@ -58,45 +58,45 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
   };
 
   return (
-    <div className="bg-card p-4 rounded-xl border border-border/50 space-y-4">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-        <h3 className="text-sm uppercase tracking-wider text-muted-foreground">Glossary</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button type="button" onClick={() => startNewEntry(true)}>New Player</Button>
-          <Button type="button" onClick={() => startNewEntry(false)}>New Entry</Button>
+    <div className="bg-card p-3 rounded-xl border border-border/50 space-y-3 h-full flex flex-col">
+      <div className="flex items-center justify-between gap-2 flex-shrink-0">
+        <h3 className="text-xs uppercase tracking-wider text-muted-foreground">Glossary</h3>
+        <div className="flex gap-1">
+          <Button type="button" size="sm" onClick={() => startNewEntry(true)} className="h-6 text-xs px-2">Player</Button>
+          <Button type="button" size="sm" onClick={() => startNewEntry(false)} className="h-6 text-xs px-2">New</Button>
         </div>
       </div>
 
-      <div className="space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar pr-2">
+      <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1 flex-1">
         {entries.length === 0 && (
-          <div className="text-xs text-muted-foreground">No glossary entries yet.</div>
+          <div className="text-xs text-muted-foreground">No entries yet.</div>
         )}
 
         {entries.map(entry => (
-          <div key={entry.id} className="rounded-xl border border-border/50 p-3 space-y-3 hover:bg-muted/5 transition-colors">
-            <div className="flex items-start gap-3">
+          <div key={entry.id} className="rounded-lg border border-border/50 p-2 space-y-2 hover:bg-muted/5 transition-colors">
+            <div className="flex items-start gap-2">
               {entry.imageBase64 && (
-                <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+                <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
                   <img src={entry.imageBase64} alt={entry.name} className="w-full h-full object-cover" />
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="truncate font-medium">{entry.name}</div>
-                  <div className="text-xs text-muted-foreground">{entry.isPlayer ? 'Player' : 'Enemy'}</div>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="truncate font-medium text-xs">{entry.name}</div>
+                  <div className="text-xs text-muted-foreground whitespace-nowrap">{entry.isPlayer ? 'P' : 'E'}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">HP {entry.currentHp ?? entry.maxHp}/{entry.maxHp} · AC {entry.ac}</div>
+                <div className="text-xs text-muted-foreground leading-tight">HP {entry.currentHp ?? entry.maxHp}/{entry.maxHp} · AC {entry.ac}</div>
               </div>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Button type="button" className="flex-1 min-w-[96px]" onClick={() => openEditorFor(entry)}>Edit</Button>
-              <Button type="button" className="flex-1 min-w-[96px]" onClick={() => handleAddToEncounter(entry)}>Add</Button>
-              <Button type="button" variant="destructive" className="flex-1 min-w-[96px]" onClick={() => {
-                if (confirm(`Delete ${entry.name} from glossary?`)) {
+            <div className="flex gap-1">
+              <Button type="button" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => openEditorFor(entry)}>Edit</Button>
+              <Button type="button" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => handleAddToEncounter(entry)}>Add</Button>
+              <Button type="button" variant="destructive" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => {
+                if (confirm(`Delete ${entry.name}?`)) {
                   removeEntry(entry.id);
                   toast.success('Removed');
                 }
-              }}>Delete</Button>
+              }}>Del</Button>
             </div>
           </div>
         ))}
