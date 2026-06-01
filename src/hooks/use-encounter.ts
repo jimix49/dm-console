@@ -47,10 +47,44 @@ export function useEncounter() {
   }, [encounter]);
 
   const addEnemy = useCallback((enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => {
-    setEncounter(prev => ({
-      ...prev,
-      enemies: [...prev.enemies, { ...enemy, id: uuidv4(), conditions: [], tags: [] }]
-    }));
+    setEncounter(prev => {
+      // Extract base name (remove trailing number if present)
+      const baseName = enemy.name.replace(/\s+\d+$/, '');
+      
+      // Find all enemies with the same base name (with or without numbers)
+      const sameNameEnemies = prev.enemies.filter(e => {
+        const existingBaseName = e.name.replace(/\s+\d+$/, '');
+        return existingBaseName === baseName;
+      });
+
+      // Determine the next number
+      let nextNumber = 1;
+      if (sameNameEnemies.length > 0) {
+        // Extract numbers from existing names
+        const numbers = sameNameEnemies
+          .map(e => {
+            const match = e.name.match(/\s+(\d+)$/);
+            return match ? parseInt(match[1], 10) : 0;
+          })
+          .filter(n => n > 0);
+        
+        // Get the highest number and add 1
+        if (numbers.length > 0) {
+          nextNumber = Math.max(...numbers) + 1;
+        } else {
+          // If no numbers found, this is the second instance
+          nextNumber = 2;
+        }
+      }
+
+      // Create the numbered name
+      const numberedName = `${baseName} ${nextNumber}`;
+
+      return {
+        ...prev,
+        enemies: [...prev.enemies, { ...enemy, name: numberedName, id: uuidv4(), conditions: [], tags: [] }]
+      };
+    });
   }, []);
 
   const updateEnemy = useCallback((id: string, updates: Partial<Enemy>) => {
@@ -72,7 +106,35 @@ export function useEncounter() {
     setEncounter(prev => {
       const enemy = prev.enemies.find(e => e.id === id);
       if (!enemy) return prev;
-      const newEnemy = { ...enemy, id: uuidv4() };
+
+      // Extract base name (remove trailing number if present)
+      const baseName = enemy.name.replace(/\s+\d+$/, '');
+      
+      // Find all enemies with the same base name
+      const sameNameEnemies = prev.enemies.filter(e => {
+        const existingBaseName = e.name.replace(/\s+\d+$/, '');
+        return existingBaseName === baseName;
+      });
+
+      // Determine the next number
+      let nextNumber = 1;
+      if (sameNameEnemies.length > 0) {
+        const numbers = sameNameEnemies
+          .map(e => {
+            const match = e.name.match(/\s+(\d+)$/);
+            return match ? parseInt(match[1], 10) : 0;
+          })
+          .filter(n => n > 0);
+        
+        if (numbers.length > 0) {
+          nextNumber = Math.max(...numbers) + 1;
+        } else {
+          nextNumber = 2;
+        }
+      }
+
+      const numberedName = `${baseName} ${nextNumber}`;
+      const newEnemy = { ...enemy, id: uuidv4(), name: numberedName };
       return { ...prev, enemies: [...prev.enemies, newEnemy] };
     });
   }, []);
