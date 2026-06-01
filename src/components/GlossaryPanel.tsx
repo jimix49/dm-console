@@ -57,10 +57,24 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
     setEditingId(null);
   };
 
+  const [tab, setTab] = useState<'all' | 'players' | 'enemies'>('all');
+  const filteredEntries = entries.filter(e => {
+    if (tab === 'all') return true;
+    if (tab === 'players') return e.isPlayer;
+    return !e.isPlayer;
+  });
+
   return (
     <div className="bg-card p-3 rounded-xl border border-border/50 space-y-3 h-full flex flex-col">
       <div className="flex items-center justify-between gap-2 flex-shrink-0">
-        <h3 className="text-xs uppercase tracking-wider text-muted-foreground">Glossary</h3>
+        <div className="flex items-center gap-2">
+          <h3 className="text-xs uppercase tracking-wider text-muted-foreground">Glossary</h3>
+          <div className="flex items-center ml-2 space-x-1">
+            <Button type="button" size="sm" variant={tab === 'all' ? 'default' : 'ghost'} onClick={() => setTab('all')} className="h-6 text-xs px-2">All ({entries.length})</Button>
+            <Button type="button" size="sm" variant={tab === 'players' ? 'default' : 'ghost'} onClick={() => setTab('players')} className="h-6 text-xs px-2">Players ({entries.filter(e => e.isPlayer).length})</Button>
+            <Button type="button" size="sm" variant={tab === 'enemies' ? 'default' : 'ghost'} onClick={() => setTab('enemies')} className="h-6 text-xs px-2">Enemies ({entries.filter(e => !e.isPlayer).length})</Button>
+          </div>
+        </div>
         <div className="flex gap-1">
           <Button type="button" size="sm" onClick={() => startNewEntry(true)} className="h-6 text-xs px-2">Player</Button>
           <Button type="button" size="sm" onClick={() => startNewEntry(false)} className="h-6 text-xs px-2">New</Button>
@@ -68,11 +82,11 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
       </div>
 
       <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1 flex-1">
-        {entries.length === 0 && (
-          <div className="text-xs text-muted-foreground">No entries yet.</div>
+        {filteredEntries.length === 0 && (
+          <div className="text-xs text-muted-foreground">No entries.</div>
         )}
 
-        {entries.map(entry => (
+        {filteredEntries.map(entry => (
           <div key={entry.id} className="rounded-lg border border-border/50 p-2 space-y-2 hover:bg-muted/5 transition-colors">
             <div className="flex items-start gap-2">
               {entry.imageBase64 && (
