@@ -156,7 +156,7 @@ export default function Home() {
       
       <main className="flex-1 overflow-hidden relative">
         <div className="w-full h-full flex gap-3 p-3">
-          <aside className="w-[20%] overflow-hidden flex-shrink-0">
+          <aside className="w-[25%] overflow-hidden flex-shrink-0">
             <GlossaryPanel
               entries={glossaryEntries}
               addEntry={addGlossaryEntry}
@@ -226,7 +226,7 @@ export default function Home() {
             </div>
           </section>
 
-          <aside className="w-[20%] overflow-hidden flex-shrink-0">
+          <aside className="w-[15%] overflow-hidden flex-shrink-0">
             <InitiativeTracker 
               encounter={encounter} 
               nextTurn={nextTurn}
