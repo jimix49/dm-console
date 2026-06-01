@@ -103,67 +103,32 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
       )}
       data-testid={`card-enemy-${enemy.id}`}
     >
-      {/* Defeated Overlay */}
-      <AnimatePresence>
-        {isDefeated && !collapsed && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="absolute inset-0 z-10 bg-destructive/10 pointer-events-none flex items-center justify-center backdrop-blur-[1px]"
-          >
-            <div className="border-4 border-destructive/50 text-destructive/70 font-black text-4xl tracking-widest uppercase rotate-[-15deg] p-4 rounded-lg mix-blend-overlay">
-              Defeated
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Header */}
+      {/* Header */
       <div className="flex items-center justify-between p-2 border-b border-border/30 bg-card/20">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0" onClick={() => setCollapsed(!collapsed)} data-testid={`button-collapse-${enemy.id}`}>
             {collapsed ? <ChevronDown className="h-3 w-3" /> : <ChevronUp className="h-3 w-3" />}
           </Button>
-          {isEditing ? (
-            <Input 
-              value={editName} 
-              onChange={e => setEditName(e.target.value)}
-              className="h-6 text-xs font-bold bg-card/60 border-primary/50 w-24"
-              autoFocus
-            />
-          ) : (
-            <h3 className={cn("font-bold tracking-wide flex items-center gap-2 text-sm", isDefeated ? "text-destructive" : "text-foreground")}>
-              {isDefeated && <Skull className="h-3 w-3" />}
+          <div className="flex items-center gap-2">
+            {enemy.imageBase64 && (
+              <div className="w-8 h-8 bg-muted rounded-sm overflow-hidden flex-shrink-0">
+                <img src={enemy.imageBase64} alt={enemy.name} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <h3 className="font-bold tracking-wide flex items-center gap-1 text-sm">
               {enemy.name}
+              {isDefeated && <Skull className="h-3 w-3 text-destructive" />}
             </h3>
-          )}
+          </div>
         </div>
-        
+
         <div className="flex items-center gap-1">
-          {enemy.initiative !== null && (
-            <Badge variant="outline" className="font-mono text-xs border-primary/30 text-primary/80 bg-primary/5 px-1.5 py-0.5">
-              INIT {enemy.initiative}
-            </Badge>
-          )}
-          <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onDuplicate}><Copy className="w-2.5 h-2.5" /></Button>
-          <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onRemove}><Trash2 className="w-2.5 h-2.5" /></Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0" data-testid={`button-options-${enemy.id}`}>
-                <Edit2 className="h-3 w-3" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40 bg-card border-border">
-              <DropdownMenuItem onClick={() => setIsEditing(!isEditing)} className="cursor-pointer font-mono text-xs">
-                <Edit2 className="mr-2 h-3 w-3" /> Edit Stats
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer font-mono text-xs">
-                <Copy className="mr-2 h-3 w-3" /> Clone Unit
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={onRemove} className="cursor-pointer font-mono text-xs text-destructive">
-                <Trash2 className="mr-2 h-3 w-3" /> Terminate
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {enemy.initiative !== null && (<div className="text-xs font-mono text-primary">INIT {enemy.initiative}</div>)}
+          <div className="flex items-center gap-0.5">
+            <Button variant="ghost" size="icon" className="h-5 w-5" onClick={() => setIsEditing(!isEditing)}><Edit2 className="w-2.5 h-2.5" /></Button>
+            <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onDuplicate}><Copy className="w-2.5 h-2.5" /></Button>
+            <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onRemove}><Trash2 className="w-2.5 h-2.5" /></Button>
+          </div>
         </div>
       </div>
 
@@ -175,94 +140,61 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="p-3 space-y-3">
-              
-              {/* Stats Row */}
-              <div className="flex justify-between items-end gap-2">
+            <div className="p-2 space-y-2">
+              <div className="flex items-center justify-between gap-2">
                 <div className="flex-1">
                   <div className="flex justify-between text-xs font-mono mb-1 uppercase tracking-wider text-muted-foreground">
-                    <span>Vitality</span>
-                    <span className={cn(hpPercent < 30 ? "text-destructive font-bold" : "text-primary")}>
+                    <span>HP</span>
+                    <span className={cn(hpPercent < 30 ? 'text-destructive font-bold' : hpPercent < 70 ? 'text-amber-500 font-semibold' : 'text-emerald-500 font-semibold')}>
                       {enemy.currentHp} / {enemy.maxHp}
                     </span>
                   </div>
                   <div className="h-2 w-full bg-card/60 rounded-full overflow-hidden border border-border/30">
-                    <motion.div 
-                      className={cn("h-full transition-all duration-500", getHpColor())}
-                      initial={{ width: 0 }}
+                    <motion.div
+                      className={cn('h-full rounded-full', hpPercent < 30 ? 'bg-destructive' : hpPercent < 70 ? 'bg-amber-500' : 'bg-emerald-500')}
                       animate={{ width: `${hpPercent}%` }}
+                      transition={{ duration: 0.25 }}
                     />
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center bg-card/30 border border-primary/20 rounded-lg p-1.5 min-w-[50px] relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition-colors" />
-                  {isEditing ? (
-                    <Input value={editAc} onChange={e => setEditAc(e.target.value)} className="h-5 w-9 text-center p-0 text-sm font-mono border-primary/50" />
-                  ) : (
-                    <span className="text-lg font-black font-mono text-primary group-hover:scale-110 transition-transform">{enemy.ac}</span>
-                  )}
-                  <div className="flex items-center gap-1 text-[10px] uppercase text-muted-foreground mt-0.5">
-                    <Shield className="w-2.5 h-2.5" /> AC
-                  </div>
+                <div className="flex flex-col items-center justify-center bg-card/30 border border-primary/20 rounded-lg p-2 min-w-[54px]">
+                  <span className="text-lg font-black font-mono text-primary">{enemy.ac}</span>
+                  <span className="text-[10px] uppercase text-muted-foreground mt-0.5">AC</span>
                 </div>
               </div>
 
-              {/* HP Controls */}
-              {!isEditing && (
-                <div className="space-y-2 p-2 bg-card/20 rounded-lg border border-border/30">
-                  <div className="flex flex-wrap gap-1">
-                    {[-10, -5, -1].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[40px] h-6 text-xs font-mono border-destructive/20 text-destructive px-1" data-testid={`btn-dmg-${val}-${enemy.id}`}>
-                        {val}
-                      </Button>
-                    ))}
-                    <div className="w-full h-px bg-border my-0.5" />
-                    {[+1, +5, +10].map(val => (
-                      <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="flex-1 min-w-[40px] h-6 text-xs font-mono border-healing/20 text-healing px-1" data-testid={`btn-heal-${val}-${enemy.id}`}>
-                        +{val}
-                      </Button>
-                    ))}
+              <div className="space-y-2 p-2 bg-card/20 rounded-lg border border-border/20">
+                <div className="grid grid-cols-3 gap-1">
+                  {[-10, -5, -1].map(val => (
+                    <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="h-8 text-xs">{val}</Button>
+                  ))}
+                  {null}
+                  {[+1, +5, +10].map(val => (
+                    <Button key={val} variant="outline" size="sm" onClick={() => handleModifyHp(val)} className="h-8 text-xs">+{val}</Button>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <Input type="number" placeholder="Amt" value={damageInput} onChange={e => setDamageInput(e.target.value)} className="h-8 w-14 text-xs font-mono text-center" />
+                  <Button onClick={() => applyDamageInput(false)} className="flex-1 h-8 text-xs">Dmg</Button>
+                  <Button onClick={() => applyDamageInput(true)} className="flex-1 h-8 text-xs">Heal</Button>
+                </div>
+              </div>
+
+              {isEditing ? (
+                <div className="space-y-2 p-2 bg-card/30 rounded-lg border border-border/20">
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input value={editName} onChange={e => setEditName(e.target.value)} className="h-9 text-xs font-mono" placeholder="Name" />
+                    <Input value={editHp} onChange={e => setEditHp(e.target.value)} className="h-9 text-xs font-mono" placeholder="Max HP" />
+                    <Input value={editAc} onChange={e => setEditAc(e.target.value)} className="h-9 text-xs font-mono" placeholder="AC" />
+                    <Input value={editInit} onChange={e => setEditInit(e.target.value)} className="h-9 text-xs font-mono" placeholder="Initiative" />
                   </div>
-                  <div className="flex gap-1">
-                    <Input 
-                      type="number" 
-                      placeholder="Amt" 
-                      value={damageInput} 
-                      onChange={e => setDamageInput(e.target.value)}
-                      className="h-6 font-mono text-center bg-card/60 border-primary/20 w-12 text-xs"
-                      data-testid={`input-manual-dmg-${enemy.id}`}
-                    />
-                    <Button onClick={() => applyDamageInput(false)} className="flex-1 h-6 bg-destructive/10 text-destructive border border-destructive/30 text-xs uppercase tracking-widest px-2" data-testid={`btn-apply-dmg-${enemy.id}`}>
-                      Dmg
-                    </Button>
-                    <Button onClick={() => applyDamageInput(true)} className="flex-1 h-6 bg-healing/10 text-healing border border-healing/30 text-xs uppercase tracking-widest px-2" data-testid={`btn-apply-heal-${enemy.id}`}>
-                      Heal
-                    </Button>
+                  <div className="flex justify-end gap-1">
+                    <Button size="sm" variant="ghost" className="h-8 text-xs px-2" onClick={() => setIsEditing(false)}>Cancel</Button>
+                    <Button size="sm" className="h-8 text-xs px-2" onClick={saveEdits}>Save</Button>
                   </div>
                 </div>
-              )}
-
-              {/* Editing Extra Fields */}
-              {isEditing && (
-                <div className="grid grid-cols-2 gap-1.5 p-2 bg-card/30 rounded-lg border border-primary/20">
-                  <div className="space-y-1">
-                    <span className="text-[10px] uppercase text-muted-foreground font-mono">Max HP</span>
-                    <Input value={editHp} onChange={e => setEditHp(e.target.value)} className="h-6 text-xs font-mono border-primary/50" />
-                  </div>
-                  <div className="space-y-1">
-                    <span className="text-[10px] uppercase text-muted-foreground font-mono">Initiative</span>
-                    <Input value={editInit} onChange={e => setEditInit(e.target.value)} className="h-6 text-xs font-mono border-primary/50" placeholder="Null" />
-                  </div>
-                  <div className="col-span-2 flex justify-end gap-1 mt-1">
-                    <Button size="sm" variant="ghost" onClick={() => setIsEditing(false)} className="h-6 text-xs px-2">Cancel</Button>
-                    <Button size="sm" onClick={saveEdits} className="h-6 text-xs px-2 bg-primary/20 text-primary border border-primary/50">Save</Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Tags & Conditions */}
-              {!isEditing && (
-                <div className="space-y-1.5">
+              ) : (
+                <div className="space-y-2">
                   <div className="flex flex-wrap gap-1">
                     {STANDARD_CONDITIONS.map(cond => (
                       <Badge 
@@ -281,7 +213,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
                       </Badge>
                     ))}
                   </div>
-                  
+
                   <div className="flex flex-wrap gap-1 items-center">
                     {enemy.tags.map(tag => (
                       <Badge key={tag} className="bg-secondary text-secondary-foreground text-[9px] uppercase font-mono pr-0.5 border border-border group" data-testid={`badge-tag-${tag}-${enemy.id}`}>
