@@ -84,9 +84,11 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
             {collapsed ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
           </Button>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-muted rounded-sm overflow-hidden flex-shrink-0">
-              {enemy.imageBase64 ? <img src={enemy.imageBase64} alt={enemy.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-xs text-muted-foreground">No Image</div>}
-            </div>
+            {enemy.imageBase64 && (
+              <div className="w-12 h-12 bg-muted rounded-sm overflow-hidden flex-shrink-0">
+                <img src={enemy.imageBase64} alt={enemy.name} className="w-full h-full object-cover" />
+              </div>
+            )}
             <h3 className="font-bold tracking-wide flex items-center gap-2">{enemy.name}{isDefeated && <Skull className="h-4 w-4 text-destructive" />}</h3>
           </div>
         </div>
@@ -106,10 +108,16 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
             <div className="flex-1 mr-4">
               <div className="flex justify-between text-xs font-mono mb-1 uppercase tracking-wider text-muted-foreground">
                 <span>HP</span>
-                <span className={cn(hpPercent < 30 ? 'text-destructive font-bold' : 'text-primary')}>{enemy.currentHp} / {enemy.maxHp}</span>
+                <span className={cn(hpPercent < 30 ? 'text-destructive font-bold' : hpPercent < 70 ? 'text-amber-500 font-semibold' : 'text-emerald-500 font-semibold')}>
+                  {enemy.currentHp} / {enemy.maxHp}
+                </span>
               </div>
               <div className="h-2 w-full bg-card/60 rounded-full overflow-hidden border border-border/30">
-                <div className={cn('h-full transition-all bg-primary')} style={{ width: `${hpPercent}%` }} />
+                <motion.div
+                  className={cn('h-full rounded-full', hpPercent < 30 ? 'bg-destructive' : hpPercent < 70 ? 'bg-amber-500' : 'bg-emerald-500')}
+                  animate={{ width: `${hpPercent}%` }}
+                  transition={{ duration: 0.25 }}
+                />
               </div>
             </div>
             <div className="flex flex-col items-center justify-center bg-card/30 border border-primary/20 rounded-lg p-2 min-w-[60px]">

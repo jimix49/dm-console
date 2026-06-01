@@ -12,9 +12,10 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Search } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import useGlossary from '@/hooks/use-glossary';
+import { Enemy } from '@/lib/types';
 
 export default function Home() {
   const { 
@@ -155,8 +156,8 @@ export default function Home() {
       
       <main className="flex-1 overflow-hidden relative">
         <div className="max-w-7xl mx-auto w-full p-4 lg:p-6 h-full">
-          <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6 h-full">
-            <aside className="space-y-6">
+          <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)_280px] gap-6 h-full">
+            <aside className="sticky top-20 self-start h-[calc(100vh-160px)] overflow-hidden">
               <GlossaryPanel
                 entries={glossaryEntries}
                 addEntry={addGlossaryEntry}
@@ -225,6 +226,14 @@ export default function Home() {
                 )}
               </div>
             </section>
+
+            <aside className="sticky top-20 self-start h-[calc(100vh-160px)] overflow-hidden">
+              <InitiativeTracker 
+                encounter={encounter} 
+                nextTurn={nextTurn}
+                setActiveTurnId={setActiveTurnId}
+              />
+            </aside>
           </div>
         </div>
 
