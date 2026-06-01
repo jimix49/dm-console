@@ -31,7 +31,7 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
       ac: entry.ac,
       initiative: entry.initiative ?? null,
       isPlayer: entry.isPlayer,
-      imageBase64: entry.imageBase64,
+      imageBase64: null,
       deathSaves: entry.deathSaves ?? null,
       glossaryId: entry.id
     } as any);
@@ -55,7 +55,7 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
         ac: player.ac,
         initiative: initiative,
         isPlayer: player.isPlayer,
-        imageBase64: player.imageBase64,
+        imageBase64: null,
         deathSaves: player.deathSaves ?? null,
         glossaryId: player.id
       } as any);

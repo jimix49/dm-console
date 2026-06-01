@@ -43,7 +43,25 @@ export function useEncounter() {
   });
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(encounter));
+    try {
+      // Don't persist imageBase64 to avoid exceeding localStorage quota
+      const toStore = {
+        ...encounter,
+        enemies: encounter.enemies.map(e => {
+          const { imageBase64, ...rest } = e;
+          return rest;
+        })
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(toStore));
+    } catch (e) {
+      // If quota exceeded, clear old encounters and retry
+      if (e instanceof DOMException && e.code === 22) {
+        console.warn('localStorage quota exceeded, clearing old data');
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        console.error('Failed to save encounter', e);
+      }
+    }
   }, [encounter]);
 
   const addEnemy = useCallback((enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => {
