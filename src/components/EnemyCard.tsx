@@ -103,7 +103,7 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
       )}
       data-testid={`card-enemy-${enemy.id}`}
     >
-      {/* Header */
+      {/* Header */}
       <div className="flex items-center justify-between p-2 border-b border-border/30 bg-card/20">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0" onClick={() => setCollapsed(!collapsed)} data-testid={`button-collapse-${enemy.id}`}>
