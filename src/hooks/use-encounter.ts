@@ -66,6 +66,14 @@ export function useEncounter() {
 
   const addEnemy = useCallback((enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => {
     setEncounter(prev => {
+      // Player characters don't need numbering
+      if (enemy.isPlayer) {
+        return {
+          ...prev,
+          enemies: [...prev.enemies, { ...enemy, id: uuidv4(), conditions: [], tags: [] }]
+        };
+      }
+
       // Extract base name (remove trailing number if present)
       const baseName = enemy.name.replace(/\s+\d+$/, '');
       
@@ -124,6 +132,12 @@ export function useEncounter() {
     setEncounter(prev => {
       const enemy = prev.enemies.find(e => e.id === id);
       if (!enemy) return prev;
+
+      // Player characters don't need numbering
+      if (enemy.isPlayer) {
+        const newEnemy = { ...enemy, id: uuidv4() };
+        return { ...prev, enemies: [...prev.enemies, newEnemy] };
+      }
 
       // Extract base name (remove trailing number if present)
       const baseName = enemy.name.replace(/\s+\d+$/, '');

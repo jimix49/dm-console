@@ -110,39 +110,38 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
         </div>
       </div>
 
-      <div className="space-y-2 overflow-y-auto custom-scrollbar pr-1 flex-1">
+      <div className="overflow-y-auto custom-scrollbar pr-1 flex-1">
         {filteredEntries.length === 0 && (
           <div className="text-xs text-muted-foreground">No entries.</div>
         )}
 
-        {filteredEntries.map(entry => (
-          <div key={entry.id} className="rounded-lg border border-border/50 p-2 space-y-2 hover:bg-muted/5 transition-colors">
-            <div className="flex items-start gap-2">
-              {entry.imageBase64 && (
-                <div className="w-8 h-8 rounded overflow-hidden flex-shrink-0">
-                  <img src={entry.imageBase64} alt={entry.name} className="w-full h-full object-cover" />
+        <div className="grid grid-cols-3 gap-2">
+          {filteredEntries.map(entry => (
+            <div key={entry.id} className="rounded-lg border border-border/50 p-1.5 space-y-1 hover:bg-muted/5 transition-colors flex flex-col">
+              <div className="flex items-start gap-1.5 min-h-0">
+                {entry.imageBase64 && (
+                  <div className="w-6 h-6 rounded overflow-hidden flex-shrink-0">
+                    <img src={entry.imageBase64} alt={entry.name} className="w-full h-full object-cover" />
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium text-[11px]">{entry.name}</div>
+                  <div className="text-[10px] text-muted-foreground leading-tight">HP {entry.currentHp ?? entry.maxHp}/{entry.maxHp}</div>
                 </div>
-              )}
-              <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="truncate font-medium text-xs">{entry.name}</div>
-                  <div className="text-xs text-muted-foreground whitespace-nowrap">{entry.isPlayer ? 'P' : 'E'}</div>
-                </div>
-                <div className="text-xs text-muted-foreground leading-tight">HP {entry.currentHp ?? entry.maxHp}/{entry.maxHp} · AC {entry.ac}</div>
+              </div>
+              <div className="flex gap-0.5 text-[10px]">
+                <Button type="button" size="sm" className="h-4 px-1 flex-1 text-[10px]" onClick={() => openEditorFor(entry)}>Edit</Button>
+                <Button type="button" size="sm" className="h-4 px-1 flex-1 text-[10px]" onClick={() => handleAddToEncounter(entry)}>Add</Button>
+                <Button type="button" variant="destructive" size="sm" className="h-4 px-1 flex-1 text-[10px]" onClick={() => {
+                  if (confirm(`Delete ${entry.name}?`)) {
+                    removeEntry(entry.id);
+                    toast.success('Removed');
+                  }
+                }}>Del</Button>
               </div>
             </div>
-            <div className="flex gap-1">
-              <Button type="button" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => openEditorFor(entry)}>Edit</Button>
-              <Button type="button" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => handleAddToEncounter(entry)}>Add</Button>
-              <Button type="button" variant="destructive" size="sm" className="h-5 text-xs px-2 flex-1" onClick={() => {
-                if (confirm(`Delete ${entry.name}?`)) {
-                  removeEntry(entry.id);
-                  toast.success('Removed');
-                }
-              }}>Del</Button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <GlossaryEditorModal open={modalOpen} onOpenChange={setModalOpen} initial={draft} onSave={handleSaveFromModal} />
