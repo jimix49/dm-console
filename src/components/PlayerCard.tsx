@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Trash2, Copy, Edit2, ChevronDown, ChevronUp, Skull } from 'lucide-react';
+import { Trash2, Copy, Edit2, ChevronDown, ChevronUp, Skull, Heart, X, Plus, Minus } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface PlayerCardProps {
@@ -18,6 +18,7 @@ interface PlayerCardProps {
 export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isActiveTurn }: PlayerCardProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [damageInput, setDamageInput] = useState('');
+  const [showDeathSaves, setShowDeathSaves] = useState(false);
 
   const isDefeated = enemy.currentHp <= 0;
 
@@ -48,6 +49,12 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     }
   };
 
+  const decrementSuccess = () => {
+    const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
+    const next = { ...current, successes: Math.max(0, current.successes - 1) };
+    onUpdate({ deathSaves: next });
+  };
+
   const incrementFailure = () => {
     const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
     const next = { ...current, failures: Math.min(3, current.failures + 1) };
@@ -58,6 +65,12 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     } else {
       onUpdate({ deathSaves: next });
     }
+  };
+
+  const decrementFailure = () => {
+    const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
+    const next = { ...current, failures: Math.max(0, current.failures - 1) };
+    onUpdate({ deathSaves: next });
   };
 
   const resetDeathSaves = () => {
@@ -142,38 +155,151 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
             </div>
           </div>
 
-          {enemy.currentHp <= 0 && (
-            <div className="p-2 bg-card/10 rounded-lg border border-border/20">
-              <div className="flex items-center justify-between mb-1">
-                <div className="text-xs font-medium">Death Saves</div>
-                <div className="text-xs text-muted-foreground">Manual</div>
+          {(isDefeated || showDeathSaves) && (
+            <div className={cn("p-2 rounded-lg border", isDefeated ? "bg-destructive/5 border-destructive/30" : "bg-card/10 border-border/20")}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <Skull className="h-4 w-4 text-destructive" />
+                  <div className="text-xs font-bold uppercase tracking-widest text-destructive">Death Saves</div>
+                </div>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setShowDeathSaves(!showDeathSaves)}
+                  className="h-4 text-xs px-1 text-muted-foreground hover:text-foreground"
+                >
+                  {showDeathSaves && !isDefeated ? '✕' : ''}
+                </Button>
               </div>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex items-center gap-1">
-                  <div className="text-xs uppercase text-muted-foreground mr-1">S</div>
-                  <div className="flex gap-0.5">
+              
+              <div className="space-y-2">
+                {/* Successes Row */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Heart className="h-3.5 w-3.5 text-healing" />
+                    <span className="text-xs font-mono text-muted-foreground">Success</span>
+                  </div>
+                  <div className="flex gap-0.5 flex-1 ml-auto">
                     {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className={cn('w-5 h-5 rounded-sm border flex items-center justify-center text-xs', (enemy.deathSaves?.successes ?? 0) > i ? 'bg-success text-success-foreground border-success' : 'bg-card/10 border-border')}>{(enemy.deathSaves?.successes ?? 0) > i ? '✓' : ''}</div>
+                      <motion.div
+                        key={`success-${i}`}
+                        animate={{ scale: (enemy.deathSaves?.successes ?? 0) > i ? 1.1 : 1 }}
+                        className={cn(
+                          'w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all cursor-pointer hover:scale-110',
+                          (enemy.deathSaves?.successes ?? 0) > i
+                            ? 'bg-healing/20 border-healing text-healing'
+                            : 'bg-card/30 border-border/40 text-muted-foreground'
+                        )}
+                        onClick={() => {
+                          if ((enemy.deathSaves?.successes ?? 0) > i) {
+                            decrementSuccess();
+                          } else {
+                            incrementSuccess();
+                          }
+                        }}
+                      >
+                        {(enemy.deathSaves?.successes ?? 0) > i ? '✓' : ''}
+                      </motion.div>
                     ))}
+                  </div>
+                  <div className="flex gap-0.5 ml-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={incrementSuccess}
+                      className="h-5 w-5 p-0 text-healing border-healing/30 hover:bg-healing/10"
+                      title="Add Success"
+                    >
+                      <Plus className="h-2.5 w-2.5" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={decrementSuccess}
+                      className="h-5 w-5 p-0 text-healing border-healing/30 hover:bg-healing/10"
+                      disabled={(enemy.deathSaves?.successes ?? 0) === 0}
+                      title="Remove Success"
+                    >
+                      <Minus className="h-2.5 w-2.5" />
+                    </Button>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1">
-                  <div className="text-xs uppercase text-muted-foreground mr-1">F</div>
-                  <div className="flex gap-0.5">
+                {/* Failures Row */}
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    <Skull className="h-3.5 w-3.5 text-destructive" />
+                    <span className="text-xs font-mono text-muted-foreground">Failure</span>
+                  </div>
+                  <div className="flex gap-0.5 flex-1 ml-auto">
                     {Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className={cn('w-5 h-5 rounded-sm border flex items-center justify-center text-xs', (enemy.deathSaves?.failures ?? 0) > i ? 'bg-destructive text-destructive-foreground border-destructive' : 'bg-card/10 border-border')}>{(enemy.deathSaves?.failures ?? 0) > i ? '✕' : ''}</div>
+                      <motion.div
+                        key={`failure-${i}`}
+                        animate={{ scale: (enemy.deathSaves?.failures ?? 0) > i ? 1.1 : 1 }}
+                        className={cn(
+                          'w-6 h-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-all cursor-pointer hover:scale-110',
+                          (enemy.deathSaves?.failures ?? 0) > i
+                            ? 'bg-destructive/20 border-destructive text-destructive'
+                            : 'bg-card/30 border-border/40 text-muted-foreground'
+                        )}
+                        onClick={() => {
+                          if ((enemy.deathSaves?.failures ?? 0) > i) {
+                            decrementFailure();
+                          } else {
+                            incrementFailure();
+                          }
+                        }}
+                      >
+                        {(enemy.deathSaves?.failures ?? 0) > i ? '✕' : ''}
+                      </motion.div>
                     ))}
                   </div>
+                  <div className="flex gap-0.5 ml-1">
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={incrementFailure}
+                      className="h-5 w-5 p-0 text-destructive border-destructive/30 hover:bg-destructive/10"
+                      title="Add Failure"
+                    >
+                      <Plus className="h-2.5 w-2.5" />
+                    </Button>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={decrementFailure}
+                      className="h-5 w-5 p-0 text-destructive border-destructive/30 hover:bg-destructive/10"
+                      disabled={(enemy.deathSaves?.failures ?? 0) === 0}
+                      title="Remove Failure"
+                    >
+                      <Minus className="h-2.5 w-2.5" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex gap-1">
-                <Button size="sm" onClick={incrementSuccess} className="flex-1 h-6 text-xs">Add S</Button>
-                <Button size="sm" onClick={incrementFailure} className="flex-1 h-6 text-xs">Add F</Button>
-                <Button variant="ghost" size="sm" onClick={resetDeathSaves} className="flex-1 h-6 text-xs">Reset</Button>
+                {/* Reset Button */}
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={resetDeathSaves}
+                  className="w-full h-6 text-xs text-muted-foreground hover:text-foreground border border-dashed border-border/40"
+                >
+                  Reset Death Saves
+                </Button>
               </div>
             </div>
+          )}
+
+          {/* Toggle Death Saves Button (when not defeated) */}
+          {!isDefeated && (
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => setShowDeathSaves(!showDeathSaves)}
+              className="w-full h-6 text-xs border-dashed border-border/40 text-muted-foreground hover:text-destructive hover:border-destructive/30"
+            >
+              {showDeathSaves ? '✕ Close Death Saves' : '+ Death Saves'}
+            </Button>
           )}
         </div>
       )}
