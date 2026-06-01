@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus } from 'lucide-react';
 import { Enemy } from '@/lib/types';
-import useGlossary from '@/hooks/use-glossary';
 import {
   Dialog,
   DialogContent,
@@ -13,14 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from '@/components/ui/label';
 
-export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'> & { glossaryId?: string | null }) => void }) {
+export default function AddEnemyForm({ onAdd, onCreateGlossaryEntry }: { onAdd: (enemy: Omit<Enemy, 'id' | 'conditions' | 'tags'> & { glossaryId?: string | null }) => void; onCreateGlossaryEntry: (entry: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => string; }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [hp, setHp] = useState('');
   const [ac, setAc] = useState('');
   const [init, setInit] = useState('');
   const [saveToGlossary, setSaveToGlossary] = useState(false);
-  const { addEntry } = useGlossary();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,19 +32,17 @@ export default function AddEnemyForm({ onAdd }: { onAdd: (enemy: Omit<Enemy, 'id
     };
 
     if (saveToGlossary) {
-      const created = addEntry({
+      const createdId = onCreateGlossaryEntry({
         name: payload.name,
         maxHp: payload.maxHp,
         currentHp: payload.currentHp,
         ac: payload.ac,
         initiative: payload.initiative,
-        conditions: [],
-        tags: [],
         isPlayer: false,
         imageBase64: null,
         deathSaves: null
-      } as Enemy);
-      payload.glossaryId = created.id;
+      } as Omit<Enemy, 'id' | 'conditions' | 'tags'>);
+      payload.glossaryId = createdId;
     }
 
     onAdd(payload);

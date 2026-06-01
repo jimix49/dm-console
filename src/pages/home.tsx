@@ -30,7 +30,14 @@ export default function Home() {
     loadEncounter
   } = useEncounter();
 
-  const { updateEntry: updateGlossaryEntry, addEntry: addGlossaryEntry } = useGlossary();
+  const {
+    entries: glossaryEntries,
+    addEntry: addGlossaryEntry,
+    updateEntry: updateGlossaryEntry,
+    removeEntry: removeGlossaryEntry,
+    importFromObject: importGlossary,
+    clear: clearGlossary
+  } = useGlossary();
 
   const dice = useDice();
   const [search, setSearch] = useState('');
@@ -38,7 +45,7 @@ export default function Home() {
   const [diceOpen, setDiceOpen] = useState(false);
 
   const handleExportEncounter = useCallback(() => {
-    const payload = JSON.stringify(encounter);
+    const payload = JSON.stringify({ encounter, glossary: glossaryEntries });
     const blob = new Blob([payload], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
@@ -50,20 +57,39 @@ export default function Home() {
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
-    toast.success('Battle exported as JSON.');
-  }, [encounter]);
+    toast.success('Battle and glossary exported as JSON.');
+  }, [encounter, glossaryEntries]);
 
   const handleImportEncounter = useCallback(async (file: File) => {
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      loadEncounter(parsed);
-      toast.success('Battle imported successfully.');
+
+      if (parsed && typeof parsed === 'object' && 'encounter' in parsed && 'glossary' in parsed) {
+        loadEncounter((parsed as any).encounter);
+        importGlossary((parsed as any).glossary);
+        toast.success('Encounter and glossary imported successfully.');
+        return;
+      }
+
+      if (parsed && typeof parsed === 'object' && 'enemies' in parsed) {
+        loadEncounter(parsed);
+        toast.success('Encounter imported successfully.');
+        return;
+      }
+
+      if (Array.isArray(parsed)) {
+        importGlossary(parsed);
+        toast.success('Glossary imported successfully.');
+        return;
+      }
+
+      toast.error('Unable to import this file.');
     } catch (error) {
       console.error('Encounter import failed', error);
       toast.error('Unable to import this battle state.');
     }
-  }, [loadEncounter]);
+  }, [loadEncounter, importGlossary]);
 
   const filteredEnemies = encounter.enemies.filter(e => {
     if (activeOnly && e.currentHp <= 0) return false;
@@ -74,6 +100,15 @@ export default function Home() {
   // Wrapped addEnemy: accept optional glossaryId passed from AddEnemyForm or GlossaryPanel
   const handleAddEnemy = (enemy: any) => {
     addEnemy(enemy);
+  };
+
+  const handleCreateGlossaryEntry = (entry: Omit<Enemy, 'id' | 'conditions' | 'tags'>) => {
+    const created = addGlossaryEntry({
+      ...entry,
+      conditions: [],
+      tags: [],
+    } as Enemy);
+    return created.id;
   };
 
   // Wrapped update: update encounter then sync back to glossary if linked
@@ -103,19 +138,37 @@ export default function Home() {
       <Header 
         encounterName={encounter.name} 
         setEncounterName={setEncounterName}
-        clearEncounter={clearEncounter}
+        clearEncounter={() => {
+          if (confirm('Purge encounter and glossary? This cannot be undone.')) {
+            clearEncounter();
+            clearGlossary();
+            toast('Encounter and glossary cleared.', {
+              style: { background: 'hsl(var(--destructive)/0.18)', border: '1px solid hsl(var(--destructive))', color: 'hsl(var(--destructive-foreground))' }
+            });
+          }
+        }}
         onExport={handleExportEncounter}
         onImport={handleImportEncounter}
         diceOpen={diceOpen}
         setDiceOpen={setDiceOpen}
       />
       
-      <main className="flex-1 flex overflow-hidden relative">
-        <div className="flex-1 flex flex-col relative z-10 p-4 lg:p-6 overflow-hidden max-w-7xl mx-auto w-full gap-6">
-          <div className="flex flex-col md:flex-row gap-6">
-            <div className="flex-1">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4 medieval-panel p-4 rounded-xl">
-                <div className="flex items-center gap-4 flex-1 w-full sm:w-auto">
+      <main className="flex-1 overflow-hidden relative">
+        <div className="max-w-7xl mx-auto w-full p-4 lg:p-6 h-full">
+          <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-6 h-full">
+            <aside className="space-y-6">
+              <GlossaryPanel
+                entries={glossaryEntries}
+                addEntry={addGlossaryEntry}
+                updateEntry={updateGlossaryEntry}
+                removeEntry={removeGlossaryEntry}
+                addEnemy={handleAddEnemy}
+              />
+            </aside>
+
+            <section className="flex flex-col gap-6 h-full">
+              <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4 medieval-panel p-4 rounded-xl">
+                <div className="flex items-center gap-4 flex-1 w-full xl:w-auto">
                   <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input 
@@ -136,10 +189,12 @@ export default function Home() {
                     <Label htmlFor="active-only" className="text-xs uppercase tracking-wider text-muted-foreground whitespace-nowrap">Living Only</Label>
                   </div>
                 </div>
-                <AddEnemyForm onAdd={handleAddEnemy} />
+                <div className="w-full xl:w-auto">
+                  <AddEnemyForm onAdd={handleAddEnemy} onCreateGlossaryEntry={handleCreateGlossaryEntry} />
+                </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 auto-rows-max overflow-y-auto pb-24 h-[calc(100vh-200px)] custom-scrollbar pr-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-4 auto-rows-max overflow-y-auto pb-24 h-[calc(100vh-260px)] custom-scrollbar pr-2">
                 <AnimatePresence>
                   {filteredEnemies.map(enemy => (
                     enemy.isPlayer ? (
@@ -169,16 +224,7 @@ export default function Home() {
                   </div>
                 )}
               </div>
-            </div>
-
-            <div className="hidden xl:flex flex-col w-80 flex-shrink-0 gap-4">
-               <InitiativeTracker 
-                 encounter={encounter} 
-                 nextTurn={nextTurn}
-                 setActiveTurnId={setActiveTurnId}
-               />
-               <GlossaryPanel />
-            </div>
+            </section>
           </div>
         </div>
 

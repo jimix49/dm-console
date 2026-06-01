@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import useGlossary from '@/hooks/use-glossary';
-import { useEncounter } from '@/hooks/use-encounter';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Enemy } from '@/lib/types';
 import GlossaryEditorModal from '@/components/GlossaryEditorModal';
 
-export default function GlossaryPanel() {
-  const { entries, addEntry, updateEntry, removeEntry, importFromObject, exportToJson } = useGlossary();
-  const { addEnemy } = useEncounter();
+interface GlossaryPanelProps {
+  entries: Enemy[];
+  addEntry: (entry: Omit<Enemy, 'id'>) => Enemy;
+  updateEntry: (id: string, updates: Partial<Enemy>) => void;
+  removeEntry: (id: string) => void;
+  addEnemy: (enemy: any) => void;
+}
+
+export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEntry, addEnemy }: GlossaryPanelProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [draft, setDraft] = useState<Partial<Enemy> | null>(null);
@@ -33,19 +38,6 @@ export default function GlossaryPanel() {
     toast.success(`${entry.name} added to encounter.`);
   };
 
-  const handleFileImport = async (file?: File) => {
-    if (!file) return;
-    try {
-      const text = await file.text();
-      const parsed = JSON.parse(text);
-      importFromObject(parsed);
-      toast.success('Glossary imported.');
-    } catch (e) {
-      console.error(e);
-      toast.error('Failed to import glossary.');
-    }
-  };
-
   const openEditorFor = (entry: Enemy) => {
     setDraft(entry);
     setEditingId(entry.id);
@@ -67,16 +59,11 @@ export default function GlossaryPanel() {
 
   return (
     <div className="bg-card p-4 rounded-xl border border-border/50 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <h3 className="text-sm uppercase tracking-wider text-muted-foreground">Glossary</h3>
-        <div className="flex items-center gap-2">
-          <button className="btn" onClick={() => startNewEntry(true)}>New Player</button>
-          <button className="btn" onClick={() => startNewEntry(false)}>New Entry</button>
-          <button className="btn" onClick={() => exportToJson()}>Export</button>
-          <label className="btn cursor-pointer">
-            Import
-            <input type="file" accept="application/json" className="hidden" onChange={e => handleFileImport(e.target.files?.[0])} />
-          </label>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" onClick={() => startNewEntry(true)}>New Player</Button>
+          <Button type="button" onClick={() => startNewEntry(false)}>New Entry</Button>
         </div>
       </div>
 
@@ -99,9 +86,14 @@ export default function GlossaryPanel() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button className="btn" onClick={() => openEditorFor(entry)}>Edit</button>
-              <button className="btn" onClick={() => handleAddToEncounter(entry)}>Add</button>
-              <button className="btn-destructive" onClick={() => { removeEntry(entry.id); toast.success('Removed'); }}>Del</button>
+              <Button type="button" onClick={() => openEditorFor(entry)}>Edit</Button>
+              <Button type="button" onClick={() => handleAddToEncounter(entry)}>Add</Button>
+              <Button type="button" variant="destructive" onClick={() => {
+                if (confirm(`Delete ${entry.name} from glossary?`)) {
+                  removeEntry(entry.id);
+                  toast.success('Removed');
+                }
+              }}>Delete</Button>
             </div>
           </div>
         ))}
