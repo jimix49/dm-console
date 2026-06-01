@@ -38,6 +38,32 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
     toast.success(`${entry.name} added to encounter.`);
   };
 
+  const handleAddAllPlayers = () => {
+    const players = entries.filter(e => e.isPlayer);
+    if (players.length === 0) {
+      toast.info('No player characters found.');
+      return;
+    }
+    let addedCount = 0;
+    for (const player of players) {
+      const initiativeStr = prompt(`${player.name} Initiative:`);
+      const initiative = initiativeStr ? parseInt(initiativeStr) : null;
+      addEnemy({
+        name: player.name,
+        maxHp: player.maxHp,
+        currentHp: player.currentHp ?? player.maxHp,
+        ac: player.ac,
+        initiative: initiative,
+        isPlayer: player.isPlayer,
+        imageBase64: player.imageBase64,
+        deathSaves: player.deathSaves ?? null,
+        glossaryId: player.id
+      } as any);
+      addedCount++;
+    }
+    toast.success(`Added ${addedCount} player(s) to encounter.`);
+  };
+
   const openEditorFor = (entry: Enemy) => {
     setDraft(entry);
     setEditingId(entry.id);
@@ -76,6 +102,9 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
           </div>
         </div>
         <div className="flex gap-1">
+          {tab === 'players' && (
+            <Button type="button" size="sm" onClick={handleAddAllPlayers} className="h-6 text-xs px-2 bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30">Add All</Button>
+          )}
           <Button type="button" size="sm" onClick={() => startNewEntry(true)} className="h-6 text-xs px-2">Player</Button>
           <Button type="button" size="sm" onClick={() => startNewEntry(false)} className="h-6 text-xs px-2">New</Button>
         </div>

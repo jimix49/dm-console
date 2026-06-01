@@ -144,6 +144,8 @@ export default function EnemyCard({ enemy, onUpdate, onRemove, onDuplicate, isAc
               INIT {enemy.initiative}
             </Badge>
           )}
+          <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onDuplicate}><Copy className="w-2.5 h-2.5" /></Button>
+          <Button variant="ghost" size="icon" className="h-5 w-5" onClick={onRemove}><Trash2 className="w-2.5 h-2.5" /></Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-5 w-5 rounded-full p-0" data-testid={`button-options-${enemy.id}`}>
