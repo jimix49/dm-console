@@ -18,6 +18,8 @@ export interface Enemy {
     successes: number;
     failures: number;
   } | null;
+  // If the combatant is stable at 0 HP (no longer making death saves)
+  stabilized?: boolean;
   // If this combatant was created from a glossary entry, store its glossary id
   glossaryId?: string | null;
 }

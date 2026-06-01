@@ -26,7 +26,31 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
 
   const handleModifyHp = (amount: number) => {
     const newHp = enemy.currentHp + amount;
-    onUpdate({ currentHp: newHp });
+
+    // If currently stabilized and taking damage, they immediately gain one failed save
+    if (enemy.stabilized && amount < 0) {
+      const current = enemy.deathSaves ?? { successes: 3, failures: 0 };
+      const nextFailures = Math.min(3, current.failures + 1);
+      const nextDeathSaves = { ...current, failures: nextFailures };
+      if (nextFailures >= 3) {
+        // They die from accumulated failures
+        onUpdate({ currentHp: 0, deathSaves: nextDeathSaves, stabilized: false });
+        toast.error(`${enemy.name} took damage while stable and died (3 failures).`);
+      } else {
+        // Become unstable and record the failure
+        onUpdate({ currentHp: Math.max(0, newHp), deathSaves: nextDeathSaves, stabilized: false });
+        toast(`${enemy.name} took damage while stable and gains 1 failed death save.`);
+      }
+      return;
+    }
+
+    const updates: Partial<Enemy> = { currentHp: newHp };
+    if (enemy.stabilized) {
+      // Removing stabilized state when HP is modified (gain or loss)
+      updates.stabilized = false;
+      updates.deathSaves = null;
+    }
+    onUpdate(updates);
   };
 
   const applyDamageInput = (isHealing: boolean = false) => {
@@ -41,8 +65,8 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
     const next = { ...current, successes: Math.min(3, current.successes + 1) };
     if (next.successes >= 3) {
-      // stabilized: remain at 0 HP but no longer require death saves
-      onUpdate({ deathSaves: null, currentHp: 0 });
+      // stabilized: remain at 0 HP, retain 3 successes and mark stabilized
+      onUpdate({ deathSaves: next, currentHp: 0, stabilized: true });
       toast.success(`${enemy.name} stabilized (3 successes).`);
     } else {
       onUpdate({ deathSaves: next });
@@ -60,7 +84,7 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     const next = { ...current, failures: Math.min(3, current.failures + 1) };
     if (next.failures >= 3) {
       // death
-      onUpdate({ deathSaves: next, currentHp: 0 });
+      onUpdate({ deathSaves: next, currentHp: 0, stabilized: false });
       toast.error(`${enemy.name} has died (3 failures).`);
     } else {
       onUpdate({ deathSaves: next });
@@ -74,7 +98,7 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
   };
 
   const resetDeathSaves = () => {
-    onUpdate({ deathSaves: { successes: 0, failures: 0 } });
+    onUpdate({ deathSaves: { successes: 0, failures: 0 }, stabilized: false });
   };
 
   return (
@@ -102,7 +126,13 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
                 <img src={enemy.imageBase64} alt={enemy.name} className="w-full h-full object-cover" />
               </div>
             )}
-            <h3 className="font-bold tracking-wide flex items-center gap-1 text-sm">{enemy.name}{isDefeated && <Skull className="h-3 w-3 text-destructive" />}</h3>
+            <h3 className="font-bold tracking-wide flex items-center gap-1 text-sm">
+              {enemy.name}
+              {isDefeated && <Skull className="h-3 w-3 text-destructive" />}
+              {enemy.stabilized && (
+                <span className="ml-1 text-[10px] uppercase px-1 rounded bg-emerald-600/10 text-emerald-400">Stable</span>
+              )}
+            </h3>
           </div>
         </div>
 
