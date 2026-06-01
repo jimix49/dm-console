@@ -41,8 +41,8 @@ export default function PlayerCard({ enemy, onUpdate, onRemove, onDuplicate, isA
     const current = enemy.deathSaves ?? { successes: 0, failures: 0 };
     const next = { ...current, successes: Math.min(3, current.successes + 1) };
     if (next.successes >= 3) {
-      // stabilized
-      onUpdate({ deathSaves: null, currentHp: Math.max(1, enemy.currentHp) });
+      // stabilized: remain at 0 HP but no longer require death saves
+      onUpdate({ deathSaves: null, currentHp: 0 });
       toast.success(`${enemy.name} stabilized (3 successes).`);
     } else {
       onUpdate({ deathSaves: next });
