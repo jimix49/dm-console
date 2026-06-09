@@ -92,21 +92,21 @@ export default function GlossaryPanel({ entries, addEntry, updateEntry, removeEn
 
   return (
     <div className="bg-card p-3 rounded-xl border border-border/50 space-y-3 h-full flex flex-col">
-      <div className="flex items-center justify-between gap-2 flex-shrink-0">
-        <div className="flex items-center gap-2">
-          <h3 className="text-xs uppercase tracking-wider text-muted-foreground">Glossary</h3>
-          <div className="flex items-center ml-2 space-x-1">
-            <Button type="button" size="sm" variant={tab === 'all' ? 'default' : 'ghost'} onClick={() => setTab('all')} className="h-6 text-xs px-2">All ({entries.length})</Button>
-            <Button type="button" size="sm" variant={tab === 'players' ? 'default' : 'ghost'} onClick={() => setTab('players')} className="h-6 text-xs px-2">Players ({entries.filter(e => e.isPlayer).length})</Button>
-            <Button type="button" size="sm" variant={tab === 'enemies' ? 'default' : 'ghost'} onClick={() => setTab('enemies')} className="h-6 text-xs px-2">Enemies ({entries.filter(e => !e.isPlayer).length})</Button>
+      <div className="flex flex-wrap items-center justify-between gap-2 flex-shrink-0">
+        <div className="flex flex-wrap items-center gap-2 min-w-0">
+          <h3 className="text-[clamp(0.72rem,1.2vw,0.9rem)] uppercase tracking-wider text-muted-foreground truncate">Glossary</h3>
+          <div className="flex flex-wrap items-center gap-1">
+            <Button type="button" size="sm" variant={tab === 'all' ? 'default' : 'ghost'} onClick={() => setTab('all')} className="h-6 min-w-[4rem] text-[0.65rem] px-2">All ({entries.length})</Button>
+            <Button type="button" size="sm" variant={tab === 'players' ? 'default' : 'ghost'} onClick={() => setTab('players')} className="h-6 min-w-[4rem] text-[0.65rem] px-2">P ({entries.filter(e => e.isPlayer).length})</Button>
+            <Button type="button" size="sm" variant={tab === 'enemies' ? 'default' : 'ghost'} onClick={() => setTab('enemies')} className="h-6 min-w-[4rem] text-[0.65rem] px-2">E ({entries.filter(e => !e.isPlayer).length})</Button>
           </div>
         </div>
-        <div className="flex gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           {tab === 'players' && (
-            <Button type="button" size="sm" onClick={handleAddAllPlayers} className="h-6 text-xs px-2 bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30">Add All</Button>
+            <Button type="button" size="sm" onClick={handleAddAllPlayers} className="h-6 min-w-[4.5rem] text-[0.65rem] px-2 bg-emerald-600/20 text-emerald-400 hover:bg-emerald-600/30 border border-emerald-500/30">Add All</Button>
           )}
-          <Button type="button" size="sm" onClick={() => startNewEntry(true)} className="h-6 text-xs px-2">Player</Button>
-          <Button type="button" size="sm" onClick={() => startNewEntry(false)} className="h-6 text-xs px-2">New</Button>
+          <Button type="button" size="sm" onClick={() => startNewEntry(true)} className="h-6 min-w-[4rem] text-[0.65rem] px-2">Player</Button>
+          <Button type="button" size="sm" onClick={() => startNewEntry(false)} className="h-6 min-w-[4rem] text-[0.65rem] px-2">New</Button>
         </div>
       </div>
 

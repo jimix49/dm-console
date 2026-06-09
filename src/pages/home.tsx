@@ -138,8 +138,8 @@ export default function Home() {
       />
       
       <main className="flex-1 overflow-hidden relative">
-        <div className="w-full h-full flex gap-3 p-3">
-          <aside className="w-[25%] overflow-hidden flex-shrink-0">
+        <div className="w-full h-full flex flex-col lg:flex-row gap-3 p-3">
+          <aside className="w-full lg:w-[25%] overflow-hidden flex-shrink-0">
             <GlossaryPanel
               entries={glossaryEntries}
               addEntry={addGlossaryEntry}
@@ -149,7 +149,7 @@ export default function Home() {
             />
           </aside>
 
-          <section className="w-[60%] flex flex-col gap-3 overflow-hidden">
+          <section className="w-full lg:w-[60%] flex flex-col gap-3 overflow-hidden">
             <div className="flex flex-col items-start justify-between gap-3 medieval-panel p-3 rounded-xl flex-shrink-0">
               <div className="flex items-center gap-3 flex-1 w-full">
                 <div className="relative flex-1 max-w-xs">
